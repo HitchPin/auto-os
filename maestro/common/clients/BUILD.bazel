@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "clients",
+    srcs = [
+        "connector_client.go",
+        "knn_client.go",
+        "ml_client.go",
+        "model_groups_client.go",
+        "models_client.go",
+        "search_pipeline_client.go",
+        "settings_client.go",
+        "tasks_client.go",
+        "util.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/common/clients",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/common/shapes",
+        "@com_github_olivere_elastic_v7//:elastic",
+        "@com_github_pkg_errors//:errors",
+    ],
+)

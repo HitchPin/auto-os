@@ -1,0 +1,9 @@
+load("@gazelle//:def.bzl", "gazelle")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+# gazelle:prefix github.com/HitchPin/maestro
+# gazelle:go_grpc_compilers @rules_go//proto:go_grpc
+gazelle(name = "gazelle")
+
+
+npm_link_all_packages(name = "node_modules")

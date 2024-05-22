@@ -1,0 +1,26 @@
+SearchEndpoint: ""
+SearchCredentialsArn: ""
+Stage: "beta"
+Certificates:
+  CertificateAuthoritySecretId: "/hp-search-beta/maestro/rootCa"
+  KeySize: 2048
+Cloud:
+  AwsProfile: "hitchpin"
+  AwsRegion: "us-west-2"
+Cli:
+  LogLevel: "Info"
+  LogFormat: "text"
+Conf:
+  ConfigBucket: "hp-maestro-search-cluster-assets-beta"
+  ConfigPrefix: "config/"
+  ClusterNameParameterId: "/hp-search-beta/maestro/clusterName"
+  ClusterModeParameterId: "/hp-search-beta/maestro/clusterMode"
+  ClusterAdminSecretId: "maestro/beta/clusterAdmin"
+  EventBusName: "maestro-beta"
+  EventLogGroupName: "arn:aws:logs:us-west-2:609912790087:log-group:MaestroBetaEvents"
+
+# EventLogGroupName: "MaestroBetaEvents"
+Discovery:
+  ServiceId: "srv-ijohvepllmmmc5id"
+  ServiceName: "search-nodes"
+  NamespaceName: "internal.hitchpin.com"

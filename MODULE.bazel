@@ -1,0 +1,3 @@
+module(name="auto-os")
+include("//.toolchains:golang.MODULE.bazel")
+include("//.toolchains:ts.MODULE.bazel")

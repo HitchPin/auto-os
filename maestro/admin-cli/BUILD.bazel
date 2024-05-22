@@ -1,0 +1,26 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "admin-cli_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/HitchPin/maestro/admin-cli",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//maestro/actions/util",
+        "//maestro/admin-cli/commands",
+        "//maestro/admin-cli/commands/certs",
+        "//maestro/admin-cli/commands/conf",
+        "//maestro/admin-cli/commands/discovery",
+        "//maestro/admin-cli/tui",
+        "//maestro/bootstrapping-workflow/configuration",
+        "//maestro/bootstrapping-workflow/workflow",
+        "@com_github_makenowjust_heredoc//:heredoc",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)
+
+go_binary(
+    name = "admin-cli",
+    embed = [":admin-cli_lib"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,18 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "discovery",
+    srcs = [
+        "discovery_cmds.go",
+        "register_instance_cmd.go",
+        "reset_disco_cmd.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/admin-cli/commands/discovery",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/meta",
+        "//maestro/actions/util",
+        "@com_github_makenowjust_heredoc//:heredoc",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

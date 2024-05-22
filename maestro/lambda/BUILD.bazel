@@ -1,0 +1,41 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
+load("@rules_pkg//:pkg.bzl", "pkg_tar", "pkg_zip")
+
+go_library( 
+    name = "lambda_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/HitchPin/maestro/lambda",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//maestro/actions/util",
+        "//maestro/lambda/apis",
+        "@com_github_aquasecurity_lmdrouter//:lmdrouter",
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_pkg_errors//:errors",
+    ],
+)
+
+go_binary(
+    name = "lambda_bin",
+    out = "bootstrap",
+    embed = [":lambda_lib"],
+    gotags = ["lambda.norpc"],
+    visibility = ["//visibility:public"],
+)
+
+go_cross_binary(
+    name = "lambda_arm",
+    platform = "@rules_go//go/toolchain:darwin_arm64_cgo",
+    target = ":lambda_bin",
+)
+
+pkg_zip(
+    name = "lambda",
+    visibility = ["//visibility:public"],
+    srcs = [
+        ":lambda_arm",
+    ],
+    package_file_name = "package.zip",
+)

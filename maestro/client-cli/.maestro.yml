@@ -1,0 +1,3 @@
+ApiEndpoint: "https://sf4apwmujg.execute-api.us-west-2.amazonaws.com/prod"
+AwsRegion: "us-west-2"
+AwsProfile: "hitchpin"

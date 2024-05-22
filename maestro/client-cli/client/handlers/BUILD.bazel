@@ -1,0 +1,26 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "handlers",
+    srcs = [
+        "curl_cluster_cmd.go",
+        "formatutil.go",
+        "get_root_cmd.go",
+        "issue_admin_cert_cmd.go",
+        "issue_cert_cmd.go",
+        "register_instance_cmd.go",
+        "signal_init_fail_cmd.go",
+        "specialize_cwagent_conf_cmd.go",
+        "specialize_os_conf_cmd.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/client-cli/client/handlers",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/client-cli/client",
+        "@com_github_aws_aws_sdk_go//aws/ec2metadata",
+        "@com_github_makenowjust_heredoc//:heredoc",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_cobra//:cobra",
+        "@com_github_tylerbrock_colorjson//:colorjson",
+    ],
+)

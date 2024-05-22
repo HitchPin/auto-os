@@ -1,0 +1,12 @@
+{
+  "name": "@auto-os/maestro-client-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "make"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

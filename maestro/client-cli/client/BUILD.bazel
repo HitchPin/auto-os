@@ -1,0 +1,23 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "client",
+    srcs = [
+        "client.go",
+        "config.go",
+        "methods.go",
+        "transport.go",
+        "utils.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/client-cli/client",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go//aws/ec2metadata",
+        "@com_github_aws_aws_sdk_go//aws/session",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2//aws/signer/v4:signer",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_viper//:viper",
+    ],
+)

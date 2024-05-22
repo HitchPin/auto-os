@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "client-cli_lib",
+    srcs = ["main.go"],
+    embedsrcs = ["build_number.txt"],
+    importpath = "github.com/HitchPin/maestro/client-cli",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//maestro/client-cli/client",
+        "//maestro/client-cli/client/handlers",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)
+
+go_binary(
+    name = "client-cli",
+    embed = [":client-cli_lib"],
+    visibility = ["//visibility:public"],
+)

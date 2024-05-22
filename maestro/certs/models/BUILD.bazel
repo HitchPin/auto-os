@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "models",
+    srcs = [
+        "AlternativeNames.go",
+        "CertResult.go",
+        "KeySettings.go",
+        "NewCARequest.go",
+        "NewCertificateRequest.go",
+        "Subject.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/certs/models",
+    visibility = ["//visibility:public"],
+)

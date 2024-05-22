@@ -1,0 +1,9 @@
+./bazel-bin
+./dist
+.DS_Store
+bazel-*
+**/bazel-*
+dist
+node_modules
+**/node_modules
+**/.idea

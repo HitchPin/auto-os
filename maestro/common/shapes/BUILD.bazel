@@ -1,0 +1,36 @@
+load("@rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "shapes",
+    srcs = [
+        "combination_technique.go",
+        "hits_response.go",
+        "ml_cluster_settings.go",
+        "ml_connector.go",
+        "ml_input_type.go",
+        "ml_model.go",
+        "ml_model_format.go",
+        "ml_model_group.go",
+        "ml_model_group_access.go",
+        "ml_model_state.go",
+        "ml_task.go",
+        "ml_task_state.go",
+        "ml_task_type.go",
+        "normalization_processor.go",
+        "normalization_technique.go",
+        "search_pipeline.go",
+        "shape_test_utils.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/common/shapes",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "shapes_test",
+    srcs = [
+        "ml_task_test.go",
+        "ml_task_type_test.go",
+        "search_pipeline_test.go",
+    ],
+    embed = [":shapes"],
+)

@@ -1,0 +1,6 @@
+import %workspace%/bazelrcs/.aspect/bazelrc/bazel7.bazelrc
+import %workspace%/bazelrcs/.aspect/bazelrc/convenience.bazelrc
+import %workspace%/bazelrcs/.aspect/bazelrc/correctness.bazelrc
+import %workspace%/bazelrcs/.aspect/bazelrc/debug.bazelrc
+import %workspace%/bazelrcs/.aspect/bazelrc/javascript.bazelrc
+import %workspace%/bazelrcs/.aspect/bazelrc/performance.bazelrc

@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "events",
+    srcs = [
+        "EventMatching.go",
+        "eventWaiter.go",
+        "formatting.go",
+        "multiMatcher.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/bootstrapping-workflow/workflow/events",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/common/events",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_cloudwatchlogs//:cloudwatchlogs",
+        "@com_github_aws_aws_sdk_go_v2_service_cloudwatchlogs//types",
+        "@com_github_pterm_pterm//:pterm",
+    ],
+)

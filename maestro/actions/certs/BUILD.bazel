@@ -1,0 +1,19 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "certs",
+    srcs = [
+        "GenerateRootCA.go",
+        "GetRootCA.go",
+        "IssueCertificate.go",
+        "Utils.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/actions/certs",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/util",
+        "//maestro/certs",
+        "//maestro/certs/models",
+        "@com_github_aws_aws_sdk_go_v2_service_secretsmanager//:secretsmanager",
+    ],
+)

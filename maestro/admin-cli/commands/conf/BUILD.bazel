@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "conf",
+    srcs = [
+        "conf_cmds.go",
+        "get_cluster_mode_cmd.go",
+        "set_cluster_mode_cmd.go",
+        "set_cluster_pwd_cmd.go",
+        "specialize_cwagent_conf_cmd.go",
+        "specialize_os_conf_cmd.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/admin-cli/commands/conf",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/conf",
+        "//maestro/actions/meta",
+        "//maestro/actions/util",
+        "//maestro/client-cli/client",
+        "@com_github_makenowjust_heredoc//:heredoc",
+        "@com_github_spf13_cobra//:cobra",
+        "@org_golang_x_term//:term",
+    ],
+)

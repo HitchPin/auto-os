@@ -1,0 +1,4 @@
+packages:
+    - 'infra/'
+    - 'infrastructure/aos-cdk-internal'
+    - 'infrastructure/aos-assembly-infra'

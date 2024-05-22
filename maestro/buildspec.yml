@@ -1,0 +1,32 @@
+version: 0.2
+  
+phases:
+  install:
+    runtime-versions:
+      golang: 1.22
+    commands:
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get install -y make
+  build:
+    commands:
+      - echo Entered the build phase...
+      - cd $CODEBUILD_SRC_DIR/client-cli/ && make
+      - cd $CODEBUILD_SRC_DIR/client-cli/ && make build-x64
+      - mv $CODEBUILD_SRC_DIR/client-cli/out/amd64/maestro-cli $CODEBUILD_SRC_DIR/client-cli/out/amd64/maestro-cli-amd64
+      - cd $CODEBUILD_SRC_DIR/lambda/ && make
+artifacts:
+  secondary-artifacts:
+    maestroCli:
+      files:
+        - arm64/maestro-cli
+        - amd64/maestro-cli-amd64
+      name: maestroCli
+      discard-paths: yes
+      base-directory: client-cli/out
+    maestroLambda:
+      files:
+        - package.zip
+      name: maestroLambda
+      discard-paths: yes
+      base-directory: lambda/out

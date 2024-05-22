@@ -1,0 +1,28 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "apis",
+    srcs = [
+        "curl_cluster.go",
+        "get_root_ca.go",
+        "issue_cert.go",
+        "register_instance.go",
+        "signal_init_failure.go",
+        "specialize_cloudwatchagent_conf.go",
+        "specialize_opensearch_conf.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/lambda/apis",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/certs",
+        "//maestro/actions/conf",
+        "//maestro/actions/meta",
+        "//maestro/actions/signal",
+        "//maestro/actions/util",
+        "//maestro/certs",
+        "//maestro/certs/models",
+        "@com_github_aquasecurity_lmdrouter//:lmdrouter",
+        "@com_github_aws_aws_lambda_go//events",
+        "@com_github_pkg_errors//:errors",
+    ],
+)

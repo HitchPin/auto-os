@@ -1,0 +1,20 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "util",
+    srcs = [
+        "common.go",
+        "events.go",
+        "lb.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/actions/util",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/common/events",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_elasticloadbalancingv2//:elasticloadbalancingv2",
+        "@com_github_aws_aws_sdk_go_v2_service_eventbridge//:eventbridge",
+        "@com_github_aws_aws_sdk_go_v2_service_eventbridge//types",
+        "@com_github_pkg_errors//:errors",
+    ],
+)

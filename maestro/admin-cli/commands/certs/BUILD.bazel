@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "certs",
+    srcs = [
+        "cert_cmds.go",
+        "get_root_cmd.go",
+        "issue_cmd.go",
+        "new_root_cmd.go",
+        "utils.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/admin-cli/commands/certs",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/certs",
+        "//maestro/actions/util",
+        "//maestro/admin-cli/commands",
+        "//maestro/certs",
+        "//maestro/certs/models",
+        "@com_github_makenowjust_heredoc//:heredoc",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)

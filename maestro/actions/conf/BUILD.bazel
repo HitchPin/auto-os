@@ -1,0 +1,27 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "conf",
+    srcs = [
+        "SetClusterPwd.go",
+        "SpecializeCloudWatchAgentConf.go",
+        "SpecializeOpenSearchConf.go",
+        "confutils.go",
+    ],
+    importpath = "github.com/HitchPin/maestro/actions/conf",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//maestro/actions/certs",
+        "//maestro/actions/util",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_service_s3//:s3",
+        "@com_github_aws_aws_sdk_go_v2_service_secretsmanager//:secretsmanager",
+        "@com_github_aws_aws_sdk_go_v2_service_servicediscovery//:servicediscovery",
+        "@com_github_aws_aws_sdk_go_v2_service_servicediscovery//types",
+        "@com_github_aws_aws_sdk_go_v2_service_ssm//:ssm",
+        "@com_github_davecgh_go_spew//spew",
+        "@com_github_pkg_errors//:errors",
+        "@in_gopkg_yaml_v3//:yaml_v3",
+        "@org_golang_x_crypto//bcrypt",
+    ],
+)
