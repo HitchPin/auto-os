@@ -1,0 +1,28 @@
+source https://api.nuget.org/v3/index.json
+
+nuget Amazon.JSII.Runtime 1.98.0
+nuget Amazon.CDK.RegionInfo 2.143.0
+nuget Mono.TextTemplating 2.3.1
+nuget System.CodeDom 8.0.0
+
+nuget Microsoft.Extensions.DependencyInjection 8.0.0
+nuget Microsoft.Extensions.Logging 8.0.0
+nuget Microsoft.Extensions.Logging.Console 8.0.0
+nuget Pulumi 3.63.1
+nuget Pulumi.Automation 3.63.1
+nuget Pulumi.Aws 6.37.1
+nuget Pulumi.AwsApiGateway 2.5.0
+nuget Pulumi.AwsNative 0.107.0
+nuget Pulumi.CloudInit 1.4.3
+nuget System.CommandLine 2.0.0-beta4.22272.1
+nuget Microsoft.CodeAnalysis.Analyzers 3.3.4
+nuget Microsoft.CodeAnalysis.CSharp 4.9.2
+nuget Microsoft.CodeAnalysis.CSharp.Workspaces 4.9.2
+
+group Testing
+    source https://api.nuget.org/v3/index.json
+    nuget coverlet.collector 6.0.2
+    nuget Microsoft.NET.Test.Sdk 17.10.0
+    nuget NSubstitute 5.1.0
+    nuget xunit 2.8.1
+    nuget xunit.runner.visualstudio 2.8.1

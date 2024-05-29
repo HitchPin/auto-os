@@ -1,0 +1,162 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich.Tests/Aos.Rich.Tests.csproj": {}
+  },
+  "projects": {
+    "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich.Tests/Aos.Rich.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich.Tests/Aos.Rich.Tests.csproj",
+        "projectName": "Aos.Rich.Tests",
+        "projectPath": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich.Tests/Aos.Rich.Tests.csproj",
+        "packagesPath": "/Users/john/.nuget/packages/",
+        "outputPath": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich.Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/john/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/Aos.Rich.csproj": {
+                "projectPath": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/Aos.Rich.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.9.0, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.6.6, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100-preview.2.24157.14/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/Aos.Rich.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/Aos.Rich.csproj",
+        "projectName": "Aos.Rich",
+        "projectPath": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/Aos.Rich.csproj",
+        "packagesPath": "/Users/john/.nuget/packages/",
+        "outputPath": "/Users/john/project-maestro/infra/aos-assembly/Aos.Rich/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/john/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Amazon.CDK.RegionInfo": {
+              "target": "Package",
+              "version": "[2.143.0, )"
+            },
+            "Pulumi": {
+              "target": "Package",
+              "version": "[3.63.1, )"
+            },
+            "Pulumi.AwsNative": {
+              "target": "Package",
+              "version": "[0.107.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.100-preview.2.24157.14/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,7 @@
 module(name="auto-os")
+include("//.toolchains:common.MODULE.bazel")
 include("//.toolchains:golang.MODULE.bazel")
 include("//.toolchains:ts.MODULE.bazel")
+include("//.toolchains:python.MODULE.bazel")
+include("//.toolchains:oci.MODULE.bazel")
+include("//.toolchains:dotnet.MODULE.bazel")

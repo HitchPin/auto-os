@@ -1,0 +1,11 @@
+bazel_dep(name = "rules_oci", version = "2.0.0-alpha1")
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+
+oci.pull(
+    name = "alpine",
+    digest = "sha256:77726ef6b57ddf65bb551896826ec38bc3e53f75cdde31354fbffb4f25238ebd",
+    image = "alpine",
+    platforms = ["linux/amd64", "linux/arm64/v8"]
+)
+
+use_repo(oci, "alpine")

@@ -1,0 +1,9 @@
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
+
+py_binary(
+    name = "event-forwarder",
+    srcs = ["main.py"],
+    deps = [
+        "@pypi_boto3//:pkg",
+    ],
+)

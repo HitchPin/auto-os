@@ -1,5 +1,1 @@
-load("@gazelle//:def.bzl", "gazelle")
-
 # gazelle:prefix github.com/HitchPin/maestro
-# gazelle:go_grpc_compilers @rules_go//proto:go_grpc
-gazelle(name = "gazelle")

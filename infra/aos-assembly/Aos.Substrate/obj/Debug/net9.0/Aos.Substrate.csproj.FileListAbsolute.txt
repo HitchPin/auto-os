@@ -1,0 +1,17 @@
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.Substrate.deps.json
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.Substrate.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.Substrate.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.DataModel.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.PlanarFoundation.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.PlanarFoundation.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/bin/Debug/net9.0/Aos.DataModel.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.csproj.AssemblyReference.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.GeneratedMSBuildEditorConfig.editorconfig
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.AssemblyInfoInputs.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.AssemblyInfo.cs
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.csproj.CoreCompileInputs.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Subs.EFA4F3BA.Up2Date
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/refint/Aos.Substrate.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/Aos.Substrate.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Substrate/obj/Debug/net9.0/ref/Aos.Substrate.dll

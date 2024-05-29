@@ -1,0 +1,34 @@
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball", "oci_image_index")
+load("@aspect_bazel_lib//lib:testing.bzl", "assert_json_matches")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@aspect_bazel_lib//lib:run_binary.bzl", "run_binary")
+load("@aspect_bazel_lib//lib:tar.bzl", "tar_rule")
+
+repo_tags = ["aos-deploy-runner:latest"]
+
+pkg_tar(
+    name = "bin-arm64_tar",
+    srcs = ["//maestro/admin-cli:bin-arm64"],
+    package_dir = "usr/local/bin",
+)
+
+oci_image(
+    name = "image-arm64",
+    base = "@alpine",
+    entrypoint = ["/usr/local/bin/bin-arm64"],
+    tars = [":bin-arm64_tar"],
+)
+
+oci_tarball(
+    name = "runner-container-image",
+    image = ":image-arm64",
+    repo_tags = repo_tags,
+    visibility = ["//visibility:public"],
+)
+filegroup(
+    name = "tarball",
+    srcs = [":runner-container-image"],
+    output_group = "tarball",
+    visibility = ["//visibility:public"],
+)

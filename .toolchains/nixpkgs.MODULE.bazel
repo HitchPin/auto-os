@@ -1,0 +1,1 @@
+bazel_dep(name = "rules_nixpkgs_core", version = "0.11.1")

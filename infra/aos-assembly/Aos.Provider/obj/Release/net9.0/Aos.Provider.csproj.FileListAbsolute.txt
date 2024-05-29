@@ -1,0 +1,12 @@
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/bin/Release/net9.0/Aos.Provider.deps.json
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/bin/Release/net9.0/Aos.Provider.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/bin/Release/net9.0/Aos.Provider.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.csproj.AssemblyReference.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.GeneratedMSBuildEditorConfig.editorconfig
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.AssemblyInfoInputs.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.AssemblyInfo.cs
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.csproj.CoreCompileInputs.cache
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/refint/Aos.Provider.dll
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/Aos.Provider.pdb
+/Users/john/project-maestro/infra/aos-assembly/Aos.Provider/obj/Release/net9.0/ref/Aos.Provider.dll

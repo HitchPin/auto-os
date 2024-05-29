@@ -1,7 +1,7 @@
-load("@rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
-load("@rules_pkg//:pkg.bzl", "pkg_tar", "pkg_zip")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
+load("@rules_pkg//:pkg.bzl", "pkg_zip")
 
-go_library( 
+go_library(
     name = "lambda_lib",
     srcs = ["main.go"],
     importpath = "github.com/HitchPin/maestro/lambda",
@@ -27,7 +27,7 @@ go_binary(
 
 go_cross_binary(
     name = "lambda_arm",
-    platform = "@rules_go//go/toolchain:darwin_arm64_cgo",
+    platform = "@io_bazel_rules_go//go/toolchain:darwin_arm64_cgo",
     target = ":lambda_bin",
 )
 

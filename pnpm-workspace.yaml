@@ -1,4 +1,5 @@
 packages:
-    - 'infra/'
-    - 'infrastructure/aos-cdk-internal'
-    - 'infrastructure/aos-assembly-infra'
+    - 'infra/aos-cdk-internal'
+    - 'infra/aos-assembly-infra'
+    - 'infra/aos-deployment'
+    - 'infra/handlers/**'

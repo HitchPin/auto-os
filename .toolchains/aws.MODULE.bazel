@@ -1,0 +1,1 @@
+bazel_dep(name = "aspect_rules_aws", version = "0.3.0")

@@ -6,3 +6,5 @@ import %workspace%/bazelrcs/modern.bazelrc
 
 # honor the setting of `skipLibCheck` in the tsconfig.json file
 common --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
+
+build --incompatible_disallow_empty_glob=false

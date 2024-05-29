@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.CDK.RegionInfo" Version="2.143.0" />
+    <PackageReference Include="Pulumi" Version="3.63.1" />
+    <PackageReference Include="Pulumi.AwsNative" Version="0.107.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Summer.Core\Summer.Core.csproj" />
+    <ProjectReference Include="..\Summer.Environment.KnownTokens\Summer.Environment.KnownTokens.csproj" />
+    <ProjectReference Include="..\Summer.Environment\Summer.Environment.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Summer.SchemaGen\Summer.SchemaGen\Summer.SchemaGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <T4Argument Include="Principals\ConditionOperators.txt" Value="Hello" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Principals\ConditionOperators.txt" />
+    <AdditionalFiles Include="Principals\ConditionOperators.txt" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

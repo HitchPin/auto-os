@@ -1,4 +1,4 @@
-load("@rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
     name = "admin-cli_lib",
@@ -22,5 +22,21 @@ go_library(
 go_binary(
     name = "admin-cli",
     embed = [":admin-cli_lib"],
+    visibility = ["//visibility:public"],
+)
+
+
+go_binary(
+    name = "bin-x86_64",
+    embed = [":admin-cli_lib"],
+    goarch = "amd64",
+    goos = "linux",
+    visibility = ["//visibility:public"],
+)
+go_binary(
+    name = "bin-arm64",
+    embed = [":admin-cli_lib"],
+    goarch = "arm64",
+    goos = "linux",
     visibility = ["//visibility:public"],
 )

@@ -1,0 +1,5 @@
+Pulumi
+Pulumi.AwsNative
+
+group Testing
+    NSubstitute

@@ -1,3 +1,4 @@
 node_modules
 infra/aos-cdk-internal/node_modules
-aos-assembly-infra/node_modules
+infra/aos-assembly-infra/node_modules
+infra/aos-deployment/node_modules
