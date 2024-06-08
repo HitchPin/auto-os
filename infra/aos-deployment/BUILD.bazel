@@ -56,7 +56,7 @@ js_binary(
 
 js_run_binary(
     # Target name
-    name = "aos-deployment",
+    name = "synth",
     srcs = SOURCES,
     args = [
         "synth",
