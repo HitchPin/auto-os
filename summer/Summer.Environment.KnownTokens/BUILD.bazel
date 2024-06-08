@@ -1,6 +1,6 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_library"
+    "csharp_library",
 )
 
 SOURCES = glob(
@@ -11,11 +11,11 @@ SOURCES = glob(
 
 csharp_library(
     name = "lib",
-    out = "Summer.Environment.KnownTokens",
     srcs = SOURCES,
+    out = "Summer.Environment.KnownTokens",
     target_frameworks = ["net8.0"],
-    deps = [
-        "//summer/Summer.Environment:lib"
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//summer/Summer.Environment:lib",
+    ],
 )

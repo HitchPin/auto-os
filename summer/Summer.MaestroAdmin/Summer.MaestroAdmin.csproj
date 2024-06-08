@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Summer.MaestroAdmin</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.6.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="runfiles">
+      <HintPath>..\..\..\..\..\private\var\tmp\_bazel_john\3a6a68614ec1074a7f0efd9d2bf92c4b\execroot\_main\bazel-out\darwin_arm64-fastbuild-ST-4287706833b5\bin\external\rules_dotnet~\tools\runfiles\runfiles\netstandard2.0\runfiles.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Summer.Environment\Summer.Environment.csproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

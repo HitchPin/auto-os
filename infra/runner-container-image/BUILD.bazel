@@ -1,9 +1,16 @@
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball", "oci_image_index")
-load("@aspect_bazel_lib//lib:testing.bzl", "assert_json_matches")
-load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@rules_pkg//:pkg.bzl", "pkg_tar")
-load("@aspect_bazel_lib//lib:run_binary.bzl", "run_binary")
-load("@aspect_bazel_lib//lib:tar.bzl", "tar_rule")
+load("@rules_apko//apko:defs.bzl", "apko_image")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+
+apko_image(
+    name = "alpine-base",
+    architecture = select({
+        "@platforms//cpu:arm64": "arm64",
+    }),
+    config = "image.yml",
+    contents = "@runner_lock//:contents",
+    tag = "alpine:latest",
+)
 
 repo_tags = ["aos-deploy-runner:latest"]
 
@@ -15,8 +22,8 @@ pkg_tar(
 
 oci_image(
     name = "image-arm64",
-    base = "@alpine",
-    entrypoint = ["/usr/local/bin/bin-arm64"],
+    base = ":alpine-base",
+    cmd = ["/bin/sh"],
     tars = [":bin-arm64_tar"],
 )
 
@@ -26,6 +33,7 @@ oci_tarball(
     repo_tags = repo_tags,
     visibility = ["//visibility:public"],
 )
+
 filegroup(
     name = "tarball",
     srcs = [":runner-container-image"],

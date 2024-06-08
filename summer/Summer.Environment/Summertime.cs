@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Pulumi;
 
 namespace Summer.Environment;
@@ -9,12 +11,25 @@ namespace Summer.Environment;
 public class Summertime
 {
     private static readonly ThreadLocal<Summertime?> _summertimes = new ThreadLocal<Summertime?>();
-    
+
+    private ILoggerFactory? loggerFactory = null;
     private Dictionary<string, IEnvProvider> tokenProviders = new Dictionary<string, IEnvProvider>();
 
+    public static ILogger<T> CreateLogger<T>() => _summertimes.Value.CreateLoggerInstance<T>() ?? new NullLogger<T>();
+
+    public static void RegisterLoggerFactory<T>(T? instance = default) where T : ILoggerFactory
+    {
+        _summertimes.Value.RegisterLoggerFactoryInstance<T>(instance);
+    }
+ 
     public static void RegisterProvider<T>() where T : IEnvProvider => _summertimes.Value.RegisterProviderInstance<T>();
     public static void RegisterProvider<T>(T instance) where T : IEnvProvider => _summertimes.Value.RegisterProviderInstance<T>(instance);
 
+    public void RegisterLoggerFactoryInstance<T>(T? i = default) where T : ILoggerFactory
+    {
+        this.loggerFactory = (i == null) ? new NullLoggerFactory() : i;
+    }
+    public ILogger<T> CreateLoggerInstance<T>() => loggerFactory?.CreateLogger<T>() ?? new NullLogger<T>();
     public void RegisterProviderInstance<T>() where T : IEnvProvider => RegisterProvider(Activator.CreateInstance<T>());
     public void RegisterProviderInstance<T>(T instance) where T: IEnvProvider
     {

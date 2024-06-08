@@ -1,6 +1,6 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_library"
+    "csharp_library",
 )
 
 SOURCES = glob(
@@ -11,14 +11,15 @@ SOURCES = glob(
 
 csharp_library(
     name = "lib",
-    out = "Summer.Environment.PulumiAws",
     srcs = SOURCES,
+    out = "Summer.Environment.PulumiAws",
     target_frameworks = ["net8.0"],
+    visibility = ["//visibility:public"],
     deps = [
+        "//summer/Summer.Environment.KnownTokens:lib",
+        "//summer/Summer.Environment:lib",
+        "@paket.main//microsoft.extensions.logging.abstractions",
         "@paket.main//pulumi",
         "@paket.main//pulumi.awsnative",
-        "//summer/Summer.Environment:lib",
-        "//summer/Summer.Environment.KnownTokens:lib",
     ],
-    visibility = ["//visibility:public"],
 )

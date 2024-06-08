@@ -1,0 +1,18 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+
+filegroup(
+    name = "plugin-zip",
+    srcs = [
+        "plugin.zip",
+    ],
+)
+
+copy_file(
+    # Name of the rule.
+    name = "zip",
+    # A Label
+    src = "plugin.zip",
+    # Path of the output file, relative to this package.
+    out = "eventing-plugin.zip",
+    visibility = ["//visibility:public"],
+)

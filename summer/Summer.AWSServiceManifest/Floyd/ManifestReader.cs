@@ -10,6 +10,7 @@ public class ManifestReader
 {
     private static readonly JsonSerializerOptions options = new JsonSerializerOptions()
     {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
     public static async Task<Dictionary<string, ServiceDescription>> ReadAsync(string file)
     {

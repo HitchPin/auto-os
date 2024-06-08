@@ -4,6 +4,8 @@ import %workspace%/bazelrcs/.aspect/aspect.bazelrc
 # Import Custom settings
 import %workspace%/bazelrcs/modern.bazelrc
 
+import %workspace%/.apko/.bazelrc
+
 # honor the setting of `skipLibCheck` in the tsconfig.json file
 common --@aspect_rules_ts//ts:skipLibCheck=honor_tsconfig
 

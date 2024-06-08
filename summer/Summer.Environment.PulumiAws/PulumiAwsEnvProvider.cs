@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Pulumi;
 using Pulumi.AwsNative;
 
@@ -26,4 +27,5 @@ public class PulumiAwsEnvProvider : IEnvProvider
     };
 
     public Output<T> ResolveToken<T>(Token<T> asdf) => Output.Create(ResolveTokenAsync(asdf));
+
 }

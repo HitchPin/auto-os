@@ -9,3 +9,6 @@ node_modules
 **/.idea
 packages/
 paket-files/
+
+**/.hp-maestro.yaml
+**/.hp-maestro.yml

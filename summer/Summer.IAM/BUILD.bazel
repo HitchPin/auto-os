@@ -1,6 +1,6 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_library"
+    "csharp_library",
 )
 
 SOURCES = glob(
@@ -8,7 +8,7 @@ SOURCES = glob(
         "*.cs",
         "Policies/*.cs",
         "Principals/*.cs",
-        "Serialization/*.cs"
+        "Serialization/*.cs",
     ],
     allow_empty = False,
     exclude = [],
@@ -16,18 +16,16 @@ SOURCES = glob(
 
 csharp_library(
     name = "lib",
-    out = "Summer.IAM",
     srcs = SOURCES,
+    out = "Summer.IAM",
     target_frameworks = ["net8.0"],
+    visibility = ["//visibility:public"],
     deps = [
-        "@paket.main//amazon.cdk.regioninfo",
-        "@paket.main//amazon.jsii.runtime",
+        "//summer/Summer.Core:lib",
+        "//summer/Summer.Environment.KnownTokens:lib",
+        "//summer/Summer.Environment:lib",
         "@paket.main//pulumi",
         "@paket.main//pulumi.awsnative",
         "@paket.main//system.codedom",
-        "//summer/Summer.Core:lib",
-        "//summer/Summer.Environment:lib",
-        "//summer/Summer.Environment.KnownTokens:lib",
     ],
-    visibility = ["//visibility:public"],
 )

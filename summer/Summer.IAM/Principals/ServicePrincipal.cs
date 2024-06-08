@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Threading.Tasks;
 using Pulumi;
 using Summer.Environment;
@@ -10,9 +11,7 @@ public record ServicePrincipal : PrincipalBase, IPrincipal
 {
     public ServicePrincipal(string servicePrincipal, string region)
     {
-        var ri = Amazon.CDK.RegionInfo.RegionInfo.Get(region);
-        ServicePrincipalName = (Input<string>)ri.ServicePrincipal(servicePrincipal)!;
-        PrincipalJson = ServicePrincipalName.Apply(spn => JsonPrincipal.OfService(spn));
+        PrincipalJson = Output<JsonPrincipal>.Create(Task.FromResult(JsonPrincipal.OfService(servicePrincipal)));
         AssumeRoleAction = StarrableArray.Of("sts:AssumeRole");
     }
     public ServicePrincipal(string servicePrincipal, bool exact = false)
@@ -24,11 +23,7 @@ public record ServicePrincipal : PrincipalBase, IPrincipal
         else
         {
             var regionInfo = Summertime.ResolveFromEnvironment(AWS.Region);
-            ServicePrincipalName = regionInfo.Apply(r =>
-            {
-                var ri = Amazon.CDK.RegionInfo.RegionInfo.Get(r);
-                return ri.ServicePrincipal(servicePrincipal);
-            })!;
+            ServicePrincipalName = (Input<string>)servicePrincipal;
         }
         PrincipalJson = ServicePrincipalName.Apply(spn => JsonPrincipal.OfService(spn));
         AssumeRoleAction = StarrableArray.Of("sts:AssumeRole");

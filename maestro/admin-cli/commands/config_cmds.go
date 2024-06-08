@@ -65,10 +65,13 @@ func createPrintCmd() *cobra.Command {
 
 func createHydrateCommand() *cobra.Command {
 
+	var substrateParam string
+	var controlPlaneParam string
 	var name string
 	var id string
 	var profile string
 	var region string
+	var useImmediately bool
 	var hydrateCmd = &cobra.Command{
 		Use:   "hydrate",
 		Short: "Hydrate a config file",
@@ -85,24 +88,44 @@ func createHydrateCommand() *cobra.Command {
 			}
 			if cmd.Flags().Lookup("profile").Changed {
 				optionFuncs = append(optionFuncs, config.WithSharedConfigProfile(profile))
-
 			}
+
 			awsConf, err := config.LoadDefaultConfig(context.TODO(), optionFuncs...)
 
 			ssmClient := ssm.NewFromConfig(awsConf)
 
-			cpb, err := getControlPlaneBootstrap(*ssmClient, name, id)
-			if err != nil {
-				return err
+			var (
+				sb  *SubstrateBootstrap
+				cpb *ControlPlaneBootstrap
+			)
+
+			if cmd.Flags().Lookup("substrateParam").Changed {
+				sb, err = getSubstrateBootstrapFromId(*ssmClient, substrateParam)
+				if err != nil {
+					return err
+				}
+			} else {
+				sb, err = getSubstrateBootstrap(*ssmClient, name, id)
+				if err != nil {
+					return err
+				}
 			}
-			sb, err := getSubstrateBootstrap(*ssmClient, name, id)
-			if err != nil {
-				return err
+
+			if cmd.Flags().Lookup("controlPlaneParam").Changed {
+				cpb, err = getControlPlaneBootstrapFromId(*ssmClient, controlPlaneParam)
+				if err != nil {
+					return err
+				}
+			} else {
+				cpb, err = getControlPlaneBootstrap(*ssmClient, name, id)
+				if err != nil {
+					return err
+				}
 			}
 
 			c, err := GetMaestroConfig()
 			c.Discovery.NamespaceName = sb.DiscoNamespaceName
-			c.Discovery.ServiceName = cpb.DiscoServiceId
+			c.Discovery.ServiceId = cpb.DiscoServiceId
 			c.Discovery.ServiceName = cpb.DiscoServiceName
 			c.Certificates.CertificateAuthoritySecretId = cpb.CertificateAuthoritySecretId
 			c.Certificates.KeySize = 2048
@@ -118,20 +141,26 @@ func createHydrateCommand() *cobra.Command {
 				return err
 			}
 
-			err = os.WriteFile("hydrated.hp-maestro.yml", cfy, 0644)
+			if useImmediately {
+				err = os.WriteFile(".hp-maestro.yaml", cfy, 0644)
+			} else {
+				err = os.WriteFile("hydrated.hp-maestro.yaml", cfy, 0644)
+			}
+
 			if err != nil {
 				return err
 			}
 			return nil
 		},
 	}
+	hydrateCmd.Flags().StringVar(&substrateParam, "substrateParam", "", "--substrateParam")
+	hydrateCmd.Flags().StringVar(&controlPlaneParam, "controlPlaneParam", "", "--controlPlaneParam")
 	hydrateCmd.Flags().StringVarP(&name, "name", "n", "", "--az")
 	hydrateCmd.Flags().StringVarP(&id, "id", "i", "", "--az")
 	hydrateCmd.Flags().StringVar(&profile, "profile", "", "--profile")
 	hydrateCmd.Flags().StringVar(&region, "region", "", "--region")
+	hydrateCmd.Flags().BoolVar(&useImmediately, "useImmediately", false, "--useImmediately")
 
-	hydrateCmd.MarkFlagRequired("name")
-	hydrateCmd.MarkFlagRequired("id")
 	return hydrateCmd
 }
 
@@ -147,8 +176,11 @@ func ConfigCommand() *cobra.Command {
 
 func getControlPlaneBootstrap(ssmClient ssm.Client, clusterName string, clusterId string) (*ControlPlaneBootstrap, error) {
 	id := "/" + clusterName + "-" + clusterId + "/controlPlane"
+	return getControlPlaneBootstrapFromId(ssmClient, id)
+}
+func getControlPlaneBootstrapFromId(ssmClient ssm.Client, paramId string) (*ControlPlaneBootstrap, error) {
 	res, err := ssmClient.GetParameter(context.TODO(), &ssm.GetParameterInput{
-		Name: &id,
+		Name: &paramId,
 	})
 	if err != nil {
 		return nil, err
@@ -160,11 +192,13 @@ func getControlPlaneBootstrap(ssmClient ssm.Client, clusterName string, clusterI
 	}
 	return &j, err
 }
-
 func getSubstrateBootstrap(ssmClient ssm.Client, clusterName string, clusterId string) (*SubstrateBootstrap, error) {
 	id := "/" + clusterName + "-" + clusterId + "/substrate"
+	return getSubstrateBootstrapFromId(ssmClient, id)
+}
+func getSubstrateBootstrapFromId(ssmClient ssm.Client, paramId string) (*SubstrateBootstrap, error) {
 	res, err := ssmClient.GetParameter(context.TODO(), &ssm.GetParameterInput{
-		Name: &id,
+		Name: &paramId,
 	})
 	if err != nil {
 		return nil, err

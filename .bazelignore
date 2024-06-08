@@ -2,3 +2,7 @@ node_modules
 infra/aos-cdk-internal/node_modules
 infra/aos-assembly-infra/node_modules
 infra/aos-deployment/node_modules
+infra/aos-assembly-prereq
+infra/providers/s3-snapshot-repo/node_modules
+infra/providers/snapshot-policy/node_modules
+infra/providers/schemas/node_modules

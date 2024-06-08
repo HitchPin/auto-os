@@ -1,6 +1,7 @@
 package certs
 
 import (
+	"crypto/x509"
 	"github.com/HitchPin/maestro/actions/util"
 	"github.com/HitchPin/maestro/certs"
 	"github.com/HitchPin/maestro/certs/models"
@@ -14,7 +15,8 @@ type GenerateRootCAInput struct {
 }
 
 type GenerateRootCAOutput struct {
-	Version string
+	Version     string
+	Certificate x509.Certificate
 }
 
 func GenerateRootCA(input GenerateRootCAInput) (*GenerateRootCAOutput, error) {
@@ -35,6 +37,7 @@ func GenerateRootCA(input GenerateRootCAInput) (*GenerateRootCAOutput, error) {
 	version, err := SaveCertToSecret(*smClient, input.CommonProps.CertificateAuthoritySecretId, *result)
 
 	return &GenerateRootCAOutput{
-		Version: *version,
+		Version:     *version,
+		Certificate: result.Cert,
 	}, nil
 }

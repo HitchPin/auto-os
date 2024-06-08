@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "lib",
+    srcs = ["main.go"],
+    importpath = "",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn:go_default_library",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "cmd",
+    embed = [":lib"],
+    visibility = ["//visibility:public"],
+)

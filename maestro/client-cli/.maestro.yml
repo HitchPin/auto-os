@@ -1,3 +1,3 @@
-ApiEndpoint: "https://sf4apwmujg.execute-api.us-west-2.amazonaws.com/prod"
-AwsRegion: "us-west-2"
-AwsProfile: "hitchpin"
+ApiEndpoint: "https://gip6uxzevc.execute-api.us-east-2.amazonaws.com/prod"
+AwsRegion: "us-east-2"
+AwsProfile: "hp-resource-providers"

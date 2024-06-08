@@ -1,21 +1,24 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_library"
+    "csharp_library",
 )
 
 SOURCES = glob(
-    include = ["*.cs", "Floyd/*.cs"],
+    include = [
+        "*.cs",
+        "Floyd/*.cs",
+    ],
     allow_empty = False,
     exclude = [],
 )
 
 csharp_library(
     name = "lib",
-    out = "Summer.AWSServiceManifest",
     srcs = SOURCES,
+    out = "Summer.AWSServiceManifest",
     target_frameworks = ["net8.0"],
-    deps = [
-        "@paket.main//pulumi"
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "@paket.main//pulumi",
+    ],
 )

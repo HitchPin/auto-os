@@ -3,3 +3,6 @@ packages:
     - 'infra/aos-assembly-infra'
     - 'infra/aos-deployment'
     - 'infra/handlers/**'
+    - 'infra/providers/schemas'
+    - 'infra/providers/s3-snapshot-repo'
+    - 'infra/providers/snapshot-policy'

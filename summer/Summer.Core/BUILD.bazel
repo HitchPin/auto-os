@@ -1,21 +1,31 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_library"
+    "csharp_library",
 )
 
 SOURCES = glob(
-    include = ["*.cs"],
+    include = [
+        "*.cs",
+        "Graph/*.cs",
+        "Cloud/*.cs",
+    ],
     allow_empty = False,
     exclude = [],
 )
 
 csharp_library(
     name = "lib",
-    out = "Summer.Core",
     srcs = SOURCES,
+    out = "Summer.Core",
     target_frameworks = ["net8.0"],
-    deps = [
-        "@paket.main//pulumi"
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "@paket.main//microsoft.extensions.dependencyinjection",
+        "@paket.main//microsoft.extensions.dependencyinjection.abstractions",
+        "@paket.main//microsoft.extensions.hosting",
+        "@paket.main//microsoft.extensions.hosting.abstractions",
+        "@paket.main//microsoft.extensions.logging.abstractions",
+        "@paket.main//pulumi",
+        "@paket.main//pulumi.automation",
+    ],
 )

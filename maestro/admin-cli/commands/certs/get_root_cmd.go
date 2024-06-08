@@ -7,18 +7,20 @@ import (
 	c "github.com/HitchPin/maestro/certs"
 	"github.com/MakeNowJust/heredoc"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 func getRootCmd() *cobra.Command {
 
 	var version string
+	var outLocation string
 
 	var issueCmd = &cobra.Command{
 		Use:   "get-root",
 		Short: "Gets the current CA root certificate.",
 		Example: heredoc.Doc(`
 			Issue a certificate signed by the CA cert.
-			$ certs get-root
+			$ certs get-root -o public.pem
 		`),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -48,11 +50,16 @@ func getRootCmd() *cobra.Command {
 			fmt.Printf("\tSerial:\t\t%s\n", cert.SerialNumber.String())
 			fmt.Printf("\tExpiration:\t%s\n", cert.NotAfter.String())
 			fmt.Printf("\tPEM:\n%s\n\n", *bs)
+
+			if cmd.Flags().Lookup("out").Changed {
+				os.WriteFile(outLocation, []byte(*bs), 644)
+			}
 			return nil
 		},
 	}
 
 	issueCmd.Flags().StringVar(&version, "version", "", "Optionally a specific version to get.")
+	issueCmd.Flags().StringVar(&outLocation, "out", "", "--out ca.pem")
 
 	return issueCmd
 }

@@ -1,0 +1,10 @@
+# OpenSearch Dashboards is served by a back end server. This setting specifies the port to use.
+server.port: 5601
+
+server.host: "0.0.0.0"
+
+opensearch.username: "admin"
+opensearch.password: "ullDQP4^"
+
+# To disregard the validity of SSL certificates, change this setting's value to 'none'.
+opensearch.ssl.verificationMode: none

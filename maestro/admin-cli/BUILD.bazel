@@ -14,6 +14,7 @@ go_library(
         "//maestro/admin-cli/tui",
         "//maestro/bootstrapping-workflow/configuration",
         "//maestro/bootstrapping-workflow/workflow",
+        "@com_github_aws_aws_sdk_go_v2_service_sts//:sts",
         "@com_github_makenowjust_heredoc//:heredoc",
         "@com_github_spf13_cobra//:cobra",
     ],
@@ -25,7 +26,6 @@ go_binary(
     visibility = ["//visibility:public"],
 )
 
-
 go_binary(
     name = "bin-x86_64",
     embed = [":admin-cli_lib"],
@@ -33,6 +33,7 @@ go_binary(
     goos = "linux",
     visibility = ["//visibility:public"],
 )
+
 go_binary(
     name = "bin-arm64",
     embed = [":admin-cli_lib"],

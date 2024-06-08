@@ -1,0 +1,37 @@
+plugins.security.ssl.transport.pemcert_filepath: public.pem
+plugins.security.ssl.transport.pemkey_filepath: private.key
+plugins.security.ssl.transport.pemtrustedcas_filepath: ca.pem
+
+plugins.security.ssl.transport.enforce_hostname_verification: false
+plugins.security.ssl.http.enabled: true
+plugins.security.ssl.http.pemcert_filepath: public.pem
+plugins.security.ssl.http.pemkey_filepath: private.key
+plugins.security.ssl.http.pemtrustedcas_filepath: ca.pem
+plugins.security.authcz.admin_dn:
+  - "UID=admin,O=HitchPin,L=Dallas,ST=TX,C=US"
+plugins.security.nodes_dn:
+  - "CN=*,O=HitchPin,L=Dallas,ST=TX,C=US"
+plugins.security.audit.type: internal_opensearch
+plugins.security.enable_snapshot_restore_privilege: true
+plugins.security.check_snapshot_restore_write_privileges: true
+plugins.security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+plugins.security.system_indices.permission.enabled: true
+
+cluster.routing.allocation.disk.threshold_enabled: false
+
+opendistro_security.audit.config.disabled_rest_categories: NONE
+opendistro_security.audit.config.disabled_transport_categories: NONE
+
+plugins.security.allow_unsafe_democertificates: false
+plugins.security.allow_default_init_securityindex: false
+
+plugins.security.restapi.password_validation_regex: '(?=.*[A-Z])(?=.*[^a-zA-Z\d])(?=.*[0-9])(?=.*[a-z]).{8,}'
+plugins.security.restapi.password_validation_error_message: "Password must be minimum 8 characters long and must contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+
+network.bind_host: 0.0.0.0
+transport.host: 0.0.0.0
+http.host: 0.0.0.0
+
+discovery.unconfigured_bootstrap_timeout: 15s
+
+bootstrap.memory_lock: true

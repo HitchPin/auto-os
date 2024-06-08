@@ -12,6 +12,7 @@ type GetRootCAInput struct {
 }
 type GetRootCAOutput struct {
 	Certificate x509.Certificate
+	SecretId    string
 }
 
 func GetRootCA(input GetRootCAInput) (*GetRootCAOutput, error) {

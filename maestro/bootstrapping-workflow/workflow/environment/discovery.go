@@ -7,6 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	asgTypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"strings"
 )
 
 func DiscoverEnvironment(exConf configuration.ExecutionConfiguration) (*DiscoveredEnvironment, error) {
@@ -110,6 +112,18 @@ func getAmiAndInstanceType(exConf configuration.ExecutionConfiguration, asg asgT
 
 	lv := res.LaunchTemplateVersions[0]
 	amiId := lv.LaunchTemplateData.ImageId
+
+	if strings.HasPrefix(*amiId, "resolve:ssm:") {
+		paramName, _ := strings.CutPrefix(*amiId, "resolve:ssm:")
+		ssmClient := ssm.NewFromConfig(exConf.Cloud.AwsConf)
+		paramRes, err := ssmClient.GetParameter(context.TODO(), &ssm.GetParameterInput{
+			Name: &paramName,
+		})
+		if err != nil {
+			return nil, err
+		}
+		amiId = paramRes.Parameter.Value
+	}
 
 	amiRes, err := ec2client.DescribeImages(context.TODO(), &ec2.DescribeImagesInput{
 		ImageIds: []string{*amiId},

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/HitchPin/maestro/actions/util"
@@ -13,6 +14,7 @@ import (
 	"github.com/HitchPin/maestro/bootstrapping-workflow/configuration"
 	"github.com/HitchPin/maestro/bootstrapping-workflow/workflow"
 	"github.com/MakeNowJust/heredoc"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/spf13/cobra"
 )
 
@@ -39,6 +41,9 @@ func createCommand() *cobra.Command {
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 
 			if cmd.Use == "config" {
+				return nil
+			}
+			if cmd.Use == "hydrate" {
 				return nil
 			}
 			config, err := cli.GetMaestroConfig()
@@ -114,6 +119,11 @@ func createBootstrapCmd() *cobra.Command {
 			config := cmd.Context().Value("config").(*cli.MaestroConfig)
 			awsConf, _ := config.Cloud.ToAwsConfig()
 
+			stsClient := sts.NewFromConfig(*awsConf)
+			res, _ := stsClient.GetCallerIdentity(context.TODO(), &sts.GetCallerIdentityInput{})
+			accountId := *res.Account
+			cwLogArn := fmt.Sprintf("arn:aws:logs:%s:%s:log-group:%s", config.Cloud.AwsRegion, accountId, config.Conf.EventLogGroupName)
+
 			workflow.RunBootstrapClusterWorkflow(configuration.ExecutionConfiguration{
 				Cloud: configuration.CloudConf{
 					AwsConf: *awsConf,
@@ -123,7 +133,7 @@ func createBootstrapCmd() *cobra.Command {
 					ClusterName: config.Conf.ClusterNameParameterId,
 					ClusterMode: config.Conf.ClusterModeParameterId,
 				},
-				EventsLogGroup: config.Conf.EventLogGroupName,
+				EventsLogGroup: cwLogArn,
 				Stage:          config.Stage,
 			})
 			return nil

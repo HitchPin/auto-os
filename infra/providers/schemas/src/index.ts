@@ -1,0 +1,1 @@
+export type { CreateSnapshotPolicyRequest } from './SnapshotPolicy';

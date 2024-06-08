@@ -1,0 +1,105 @@
+{
+    "typeName": "HitchPin::AutoOs::MaestroAdminCliInvocation",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "definitions": {
+        "HydrationOptions": {
+            "type": "object",
+            "properties": {
+                "SubstrateParamName": {
+                    "type": "string",
+                    "description": "SSM param name containing all required values for substrate stack hydration."
+                },
+                "ControlPlaneParamName": {
+                    "type": "string",
+                    "description": "SSM param name containing all required values for control plane stack hydration."
+                },
+                "DataPlaneParamName": {
+                    "type": "string",
+                    "description": "SSM param name containing all required values for control plane stack hydration."
+                }
+            },
+            "required": [
+                "SubstrateParamName",
+                "ControlPlaneParamName",
+                "DataPlaneParamName"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "tagging": {
+        "taggable": false
+    },
+    "properties": {
+        "ProjectName": {
+            "description": "CodeBuild project name.",
+            "type": "string"
+        },
+        "CliCommand": {
+            "description": "A Maestro CLI command (without the ./maestro-admin part)",
+            "type": "string"
+        },
+        "RoleArn": {
+            "description": "IAM role with permissions to execute the given Admin CLI command.",
+            "type": "string"
+        },
+        "Hydration": {
+            "$ref": "#/definitions/HydrationOptions"
+        },
+
+        "InvocationId": {
+            "type": "string"
+        },
+        "CommandOutput": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "CliCommand",
+        "Hydration",
+        "RoleArn",
+        "ProjectName"
+    ],
+    "readOnlyProperties": [
+        "/properties/InvocationId",
+        "/properties/CommandOutput"
+    ],
+    "primaryIdentifier": [
+        "/properties/InvocationId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "codebuild:StartBuild",
+                "codebuild:BatchGetBuilds",
+                "s3:GetObject",
+                "iam:PassRole"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "codebuild:BatchGetBuilds",
+                "iam:PassRole"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "codebuild:BatchGetBuilds",
+                "iam:PassRole"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "codebuild:BatchGetBuilds",
+                "iam:PassRole"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "codebuild:BatchGetBuilds",
+                "iam:PassRole"
+            ]
+        }
+    }
+}

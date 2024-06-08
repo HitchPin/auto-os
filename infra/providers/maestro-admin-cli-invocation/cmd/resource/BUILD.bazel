@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "resource",
+    srcs = [
+        "config.go",
+        "model.go",
+        "resource.go",
+    ],
+    importpath = "",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go//aws/session",
+        "@com_github_aws_aws_sdk_go//service/codebuild",
+        "@com_github_aws_aws_sdk_go//service/s3",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler:go_default_library",
+        "@com_github_davecgh_go_spew//spew",
+        "@com_github_pkg_errors//:errors",
+        "@in_gopkg_yaml_v2//:go_default_library",
+    ],
+)

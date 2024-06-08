@@ -1,0 +1,79 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@aspect_rules_esbuild//esbuild:defs.bzl", "esbuild")
+load("@rules_pkg//:pkg.bzl", "pkg_zip")
+load("@rules_pkg//:mappings.bzl", "pkg_files", "strip_prefix")
+
+
+npm_link_all_packages(name = "node_modules")
+
+SRC_PATTERNS = [
+    "package.json",
+    "src/**/*.ts",
+]
+
+TEST_PATTERNS = [
+    "test/**/*.spec.ts",
+]
+
+SOURCES = glob(
+    include = SRC_PATTERNS,
+    allow_empty = True,
+    exclude = TEST_PATTERNS,
+)
+
+DEPS = [
+    ":node_modules/@types/node",
+    ":node_modules/@types/aws-lambda",
+    ":node_modules/@opensearch-project/opensearch",
+    ":node_modules/@aws-sdk/client-secrets-manager",
+    ":node_modules/typescript",
+]
+
+ts_project(
+    name = "ts-lib",
+    srcs = SOURCES,
+    declaration = True,
+    declaration_dir = "dist",
+    out_dir = "dist",
+    root_dir = "src",
+    transpiler = "tsc",
+    visibility = ["//visibility:public"],
+    deps = DEPS,
+)
+
+
+esbuild(
+    name = "bundle",
+    srcs = SOURCES,
+    deps = DEPS,
+    output_dir = False,
+    output = "index.js",
+    bazel_sandbox_plugin = True,
+    entry_point = "src/index.ts",
+    tsconfig = "tsconfig.json",
+    esbuild_log_level = "verbose",
+    js_log_level = "debug",
+    platform = "node",
+    minify = True,
+    metafile = True,
+    target = "node18",
+    format = "cjs"
+)
+
+pkg_files(
+    name = "bundle-files",
+    srcs = [
+        ":bundle",
+    ],
+    strip_prefix = strip_prefix.files_only()
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":bundle-files",
+    ],
+    package_file_name = "package.zip",
+    visibility = ["//visibility:public"],
+)

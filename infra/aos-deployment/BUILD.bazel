@@ -10,7 +10,8 @@ SRC_PATTERNS = [
     "**/*.py",
     "**/*.sh",
     "**/*.yml",
-    "**/*.yaml"
+    "**/*.yaml",
+    "lib/substrate/configs/*.*",
 ]
 
 EX_PATTERNS = [
@@ -28,66 +29,87 @@ SOURCES = glob(
 )
 
 DEPS = [
-        ":node_modules/@types/jest",
-        ":node_modules/@types/node",
-        ":node_modules/aws-cdk",
-        ":node_modules/aws-cdk-lib",
-        ":node_modules/constructs",
-        ":node_modules/source-map-support",
-        ":node_modules/ts-jest",
-        ":node_modules/ts-node",
-        ":node_modules/typescript",
-        "//infra/aos-assembly-infra:node_modules",
-        "//infra/runner-container-image:tarball"
+    ":node_modules/@types/node",
+    ":node_modules/aws-cdk",
+    ":node_modules/aws-cdk-lib",
+    ":node_modules/@aws-community/ephemeral",
+    ":node_modules/cron-validate",
+    ":node_modules/constructs",
+    ":node_modules/source-map-support",
+    ":node_modules/ts-node",
+    ":node_modules/typescript",
+    ":node_modules/zod",
+    "//infra/aos-cdk-internal:aos-cdk-internal",
+    "//maestro/lambda:lambda",
 ]
 
 js_binary(
     name = "bin-cdk",
-    log_level = "debug",
     copy_data_to_bin = True,
-    include_npm = True,
     # Reference the location where the acorn npm module was linked in the root Bazel package
     data = SOURCES.extend(DEPS),
-    entry_point = "run-cdk.js"
+    entry_point = "run-cdk.js",
+    include_npm = True,
+    include_types = True,
+    log_level = "debug",
 )
 
 js_run_binary(
     # Target name
     name = "aos-deployment",
-    args = ["synth", "--quiet", "--profile", "hitchpin"],
-    log_level = "debug",
-    tool = ":bin-cdk",
     srcs = SOURCES,
+    args = [
+        "synth",
+        "--quiet",
+        "--profile",
+        "hitchpin",
+    ],
     chdir = package_name(),
-    out_dirs = ["cdk.out"],
-    use_execroot_entry_point = True,
     copy_srcs_to_bin = True,
-    silent_on_success = False,
     env = {
-        "CONTAINER_TARBALL": "$(location //infra/runner-container-image:tarball)"
+        "MAESTRO_LAMBDA_LOC": "$(location //maestro/lambda:lambda)",
     },
     execution_requirements = {
-        "requires-network": "yes"
-    }
+        "requires-network": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
 )
 
 js_run_binary(
     # Target name
     name = "deploy",
-    args = ["deploy", "--profile", "hitchpin"],
-    log_level = "debug",
-    tool = ":bin-cdk",
     srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "hp-resource-providers",
+        "--parameters",
+        "*:ClusterName=HpBeta",
+        "--parameters",
+        "*:ClusterId=abc123",
+        "--parameters",
+        "*:ClusterDnsRoot=search.internal.hitchpin.com",
+        "Foundation",
+        "Substrate",
+        "ControlPlane",
+        "DataPlane",
+        "Management",
+    ],
     chdir = package_name(),
-    out_dirs = ["cdk.out"],
-    use_execroot_entry_point = True,
     copy_srcs_to_bin = True,
-    silent_on_success = False,
-    env = {
-        "CONTAINER_TARBALL": "$(location //infra/runner-container-image:tarball)"
-    },
     execution_requirements = {
         "requires-network": "yes",
-        "no-sandbox": "yes"
-    }
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
 )

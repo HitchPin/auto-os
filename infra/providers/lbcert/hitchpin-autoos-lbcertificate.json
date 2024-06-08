@@ -1,0 +1,140 @@
+{
+    "typeName": "HitchPin::AutoOs::LbCertificate",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "definitions": {
+        "RSAKeySize": {
+            "$comment": "RSA key size.",
+            "type": "integer",
+            "enum": [
+                1024,
+                2048,
+                4096
+            ],
+            "default": 2048
+        },
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": true,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags"
+    },
+    "properties": {
+        "KeySize": {
+            "$ref": "#/definitions/RSAKeySize"
+        },
+        "ExpirationDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3650,
+            "default": 730
+        },
+        "RootCASecretId": {
+            "description": "The secret id of the root CA certificate.",
+            "type": "string"
+        },
+        "CommonName": {
+            "description": "The common name of the cert.",
+            "type": "string"
+        },
+        "Tags": {
+            "description": "An array of key-value pairs to apply to this resource.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        },
+
+
+        "AcmCertificateId": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "RootCASecretId",
+        "CommonName"
+    ],
+    "readOnlyProperties": [
+        "/properties/AcmCertificateId"
+    ],
+    "primaryIdentifier": [
+        "/properties/AcmCertificateId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "acm:ImportCertificate",
+                "acm:GetCertificate",
+                "acm:DescribeCertificate",
+                "secretsmanager:GetSecretValue",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "acm:GetCertificate",
+                "acm:DescribeCertificate",
+                "secretsmanager:GetSecretValue",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "acm:ImportCertificate",
+                "acm:GetCertificate",
+                "acm:DescribeCertificate",
+                "secretsmanager:GetSecretValue",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "acm:GetCertificate",
+                "acm:DescribeCertificate",
+                "secretsmanager:GetSecretValue",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "acm:GetCertificate",
+                "acm:DescribeCertificate",
+                "secretsmanager:GetSecretValue",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        }
+    }
+}

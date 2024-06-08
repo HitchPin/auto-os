@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
 load("@rules_pkg//:pkg.bzl", "pkg_zip")
 
@@ -19,7 +20,6 @@ go_library(
 
 go_binary(
     name = "lambda_bin",
-    out = "bootstrap",
     embed = [":lambda_lib"],
     gotags = ["lambda.norpc"],
     visibility = ["//visibility:public"],
@@ -27,15 +27,24 @@ go_binary(
 
 go_cross_binary(
     name = "lambda_arm",
-    platform = "@io_bazel_rules_go//go/toolchain:darwin_arm64_cgo",
+    platform = "@io_bazel_rules_go//go/toolchain:linux_arm64",
     target = ":lambda_bin",
+)
+
+copy_file(
+    # Name of the rule.
+    name = "copy_arm",
+    # A Label
+    src = ":lambda_arm",
+    # Path of the output file, relative to this package.
+    out = "bootstrap",
 )
 
 pkg_zip(
     name = "lambda",
-    visibility = ["//visibility:public"],
     srcs = [
-        ":lambda_arm",
+        ":copy_arm",
     ],
     package_file_name = "package.zip",
+    visibility = ["//visibility:public"],
 )

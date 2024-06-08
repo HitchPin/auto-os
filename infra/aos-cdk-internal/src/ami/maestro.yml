@@ -1,0 +1,67 @@
+# Document Start 
+#
+name: "MaestroClientCLI"
+description: "CLI for Maestro service"
+schemaVersion: 1.0
+parameters:
+  - ArmAssetsBucketName:
+      type: string
+      default: "hp-maestro-search-cluster-assets-beta"
+      description: Bucket name.
+  - ArmAssetsBucketKey:
+      type: string
+      default: "v1"
+      description: No leading slash, NO trailed slash!
+  - AmdAssetsBucketName:
+      type: string
+      default: "hp-maestro-search-cluster-assets-beta"
+      description: Bucket name.
+  - AmdAssetsBucketKey:
+      type: string
+      default: "v1"
+      description: No leading slash, NO trailed slash!
+phases:
+  -
+    name: 'build'
+    steps:
+    - name: DetermineUrlFromArchitecture
+      action: ExecuteBash
+      inputs:
+        commands:
+          - |
+            ARM_BUCKET={{ArmAssetsBucketName}}
+            ARM_KEY={{ArmAssetsBucketKey}}
+            AMD_BUCKET={{AmdAssetsBucketName}}
+            AMD_KEY={{AmdAssetsBucketKey}}
+            ARCH=$(uname -m)
+            case $ARCH in
+              'x86_64')
+                echo "s3://${AMD_BUCKET}/${AMD_KEY}"
+                ;;
+              'aarch64')
+                echo "s3://${ARM_BUCKET}/${ARM_KEY}"
+                ;;
+              *)
+                echo "The '$ARCH' architecture is not supported. Failing build."
+                exit 1
+                ;;
+            esac
+    - name: DownloadMaestro
+      action: ExecuteBash
+      inputs:
+        commands:
+          - |
+            S3URI={{ build.DetermineUrlFromArchitecture.outputs.stdout}}
+            aws s3 cp $S3URI ./tmp/maestro
+            sudo mv ./tmp/maestro /usr/bin/maestro
+            sudo chmod +x /usr/bin/maestro
+
+  -
+    name: 'validate'
+    steps:
+    - name: TestMaestro
+      action: ExecuteBash
+      inputs:
+        commands:
+          - |
+            maestro -v

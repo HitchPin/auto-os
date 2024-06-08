@@ -43,6 +43,10 @@ func GetRootCaApi(ctx context.Context, req events.APIGatewayProxyRequest) (res e
 		CommonProps: commonProps,
 		Version:     reqInput.Version,
 	})
+	if err != nil {
+		slog.Error("Error fetchingn root CA!", err)
+		return lmdrouter.HandleError(errors.Wrap(err, "Could not fetch root CA"))
+	}
 	slog.Info("Got info: ", "Subject", actionRes.Certificate.Subject.String())
 
 	if err != nil {

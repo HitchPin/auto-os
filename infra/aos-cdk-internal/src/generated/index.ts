@@ -1,0 +1,1 @@
+export * from './hpautoos.generated';

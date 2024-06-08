@@ -7,10 +7,10 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.CDK.RegionInfo" Version="2.143.0" />
     <PackageReference Include="Pulumi" Version="3.63.1" />
     <PackageReference Include="Pulumi.AwsNative" Version="0.107.0" />
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
+    <PackageReference Remove="Amazon.CDK.RegionInfo" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Summer.Core\Summer.Core.csproj" />

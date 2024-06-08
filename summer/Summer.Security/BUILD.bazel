@@ -1,0 +1,26 @@
+load(
+    "@rules_dotnet//dotnet:defs.bzl",
+    "csharp_library",
+)
+
+SOURCES = glob(
+    include = [
+        "*.cs",
+    ],
+    allow_empty = False,
+    exclude = [],
+)
+
+csharp_library(
+    name = "lib",
+    srcs = SOURCES,
+    out = "Summer.Security",
+    target_frameworks = ["net8.0"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//summer/Summer.Core:lib",
+        "//summer/Summer.IAM:lib",
+        "@paket.main//pulumi",
+        "@paket.main//pulumi.awsnative",
+    ],
+)

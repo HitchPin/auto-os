@@ -16,7 +16,7 @@ public record OrganizationPrincipal : PrincipalBase
     {
         return Output.All(orgId).Apply(oid =>
             new Conditions()
-                .WithStringEquals(new ConditionProperties()
+                .WithOperator(ConditionOperator.Create("StringEquals"), new ConditionProperties()
                 .WithProperty("aws:PrincipalOrgID", oid)));
     }
 }

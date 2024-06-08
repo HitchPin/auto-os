@@ -2,25 +2,25 @@ searchendpoint: ""
 searchcredentialsarn: ""
 stage: beta
 certificates:
-    certificateauthoritysecretid: arn:aws:secretsmanager:us-west-2:609912790087:secret:/hp-search-beta-n528gsmwtn/maestro/rootCa-PrkkNt
+    certificateauthoritysecretid: arn:aws:secretsmanager:us-east-2:211125312321:secret:ControlPlaneRootCA5037C383-LqhpXT
     keysize: 2048
 cloud:
     awsassumerolearn: ""
-    awsprofile: hitchpin
-    awsregion: us-west-2
+    awsprofile: hp-resource-providers
+    awsregion: us-east-2
 cli:
     loglevel: Info
     logformat: text
     logdebuginformation: false
 conf:
-    eventbusname: hp-search-beta-n528gsmwtn-maestro
-    eventloggroupname: "arn:aws:logs:us-west-2:609912790087:log-group:HpSearch-betaN528GSMWTNMaestroEvents:*"
-    configbucket: hp-search-beta-n528gsmwtn-assets
-    configprefix: ""
-    clusternameparameterid: /hp-search-beta-n528gsmwtn/maestro/clusterName
-    clustermodeparameterid: /hp-search-beta-n528gsmwtn/maestro/clusterMode
-    clusteradminsecretid: arn:aws:secretsmanager:us-west-2:609912790087:secret:/hp-search-beta-n528gsmwtn/maestro/clusterAdmin-AXEIFI
+    eventbusname: hpbetaabc123-maestro
+    eventloggroupname: HpBetaabc123-MaestroEvents
+    configbucket: hpbetaabc123-assets
+    configprefix: config/
+    clusternameparameterid: /HpBeta-abc123/maestro/clusterName
+    clustermodeparameterid: /HpBeta-abc123/maestro/clusterMode
+    clusteradminsecretid: arn:aws:secretsmanager:us-east-2:211125312321:secret:/HpBeta-abc123/maestro/clusterAdminPwd-LT8HBO
 discovery:
-    serviceid: srv-ijohvepllmmmc5id
-    servicename: ""
+    serviceid: srv-f2wapqpnvupantnr
+    servicename: search-nodes
     namespacename: internal.hitchpin.com

@@ -1,0 +1,150 @@
+{
+    "typeName": "HitchPin::AutoOs::RootCA",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "definitions": {
+        "RSAKeySize": {
+            "$comment": "RSA key size.",
+            "type": "integer",
+            "enum": [
+                1024,
+                2048,
+                4096
+            ],
+            "default": 2048
+        },
+        "DistinguishedNamePart": {
+            "type": "string"
+        },
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": true,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false
+    },
+    "properties": {
+        "KeySize": {
+            "$ref": "#/definitions/RSAKeySize"
+        },
+        "Subject": {
+            "description": "The subject of the CA.",
+            "type": "object",
+            "properties": {
+                "CommonName": { "$ref": "#/definitions/DistinguishedNamePart" },
+                "Organization": { "$ref": "#/definitions/DistinguishedNamePart" },
+                "OrganizationalUnit": { "$ref": "#/definitions/DistinguishedNamePart" },
+                "Country": { "$ref": "#/definitions/DistinguishedNamePart" },
+                "State": { "$ref": "#/definitions/DistinguishedNamePart" },
+                "City": { "$ref": "#/definitions/DistinguishedNamePart" }
+            },
+            "required": [
+                "CommonName",
+                "Organization",
+                "Country",
+                "City"
+            ],
+            "additionalProperties": false
+        },
+        "ExpirationDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3650,
+            "default": 3650
+        },
+        "PrivateKeyKmsKeyId": {
+            "type": "string"
+        },
+        "PrivateKeySecretName": {
+            "type": "string"
+        },
+        "Tags": {
+            "description": "An array of key-value pairs to apply to this resource.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        },
+
+        "PublicCertificatePem": {
+            "type": "string"
+        },
+        "Serial": {
+            "type": "string"
+        },
+        "PrivateKeySecretArn": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "Subject",
+        "PrivateKeyKmsKeyId",
+        "PrivateKeySecretName"
+    ],
+    "readOnlyProperties": [
+        "/properties/PublicCertificatePem",
+        "/properties/Serial",
+        "/properties/PrivateKeySecretArn"
+    ],
+    "primaryIdentifier": [
+        "/properties/PrivateKeySecretArn"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "secretsmanager:CreateSecret",
+                "secretsmanager:TagResource",
+                "secretsmanager:ListSecrets",
+                "kms:GenerateDataKey",
+                "kms:Encrypt",
+                "kms:Decrypt"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:ListSecrets",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "secretsmanager:DeleteSecret"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "secretsmanager:ListSecrets",
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ]
+        }
+    }
+}

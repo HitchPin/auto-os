@@ -1,0 +1,127 @@
+# Document Start
+#
+name: "OpenSearch"
+description: "Amazon OpenSearch Service"
+schemaVersion: 1.0
+parameters:
+  - AssetsBucketName:
+      type: string
+      default: "hp-maestro-search-cluster-assets-beta"
+      description: Bucket name.
+  - ServiceFileKey:
+      type: string
+      default: "config/opensearch.service"
+      description: No leading slash, NO trailed slash!
+  - EventingPluginBucketName:
+      type: string
+      default: "hp-maestro-search-cluster-assets-beta"
+      description: Bucket name.
+  - EventingPluginKey:
+      type: string
+      default: "config/opensearch.service"
+      description: No leading slash, NO trailed slash!
+phases:
+  -
+    name: 'build'
+    steps:
+      - name: DetermineUrlFromArchitecture
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              ARCH=$(uname -m)
+              case $ARCH in
+                'x86_64')
+                  echo 'https://artifacts.opensearch.org/releases/bundle/opensearch/2.14.0/opensearch-2.14.0-linux-x64.rpm'
+                  ;;
+                'aarch64')
+                  echo 'https://artifacts.opensearch.org/releases/bundle/opensearch/2.14.0/opensearch-2.14.0-linux-arm64.rpm'
+                  ;;
+                *)
+                  echo "The '$ARCH' architecture is not supported. Failing build."
+                  exit 1
+                  ;;
+              esac
+      - name: Download
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -euo pipefail
+              DL_URL={{ build.DetermineUrlFromArchitecture.outputs.stdout}}
+              echo "Using download url $DL_URL"
+              wget --progress=bar:force:noscroll $DL_URL -O ./opensearch.rpm
+              sudo rpm --import https://artifacts.opensearch.org/publickeys/opensearch.pgp
+              sudo OPENSEARCH_INITIAL_ADMIN_PASSWORD='toosimplethiswillfail' rpm -ivh ./opensearch.rpm || true
+              
+      - name: Configure
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -euo pipefail
+              VM_MAX_MAP_COUNT=262144
+
+              if grep -wq "vm.max_map_count" /etc/cloud/cloud.cfg; then 
+                  CUR_VAL=$(cat /proc/sys/vm/max_map_count)
+                  echo "Setting 'vm.max_map_count' already manually overwritten to $(CUR_VAL). This may be a problem!" 
+              else 
+
+                  echo "Setting 'vm.max_map_count' is being set to '$VM_MAX_MAP_COUNT'."
+                  sudo -E sh -c 'echo "vm.max_map_count=262144" >> /etc/sysctl.conf'
+                  sudo sysctl -p
+              fi
+
+      - name: SetupService
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -euo pipefail
+              BUCKET={{AssetsBucketName}}
+              KEY={{ServiceFileKey}}
+              S3URI=s3://${BUCKET}/${KEY}
+              aws s3 cp $S3URI /tmp/opensearch.service
+              sudo mv /tmp/opensearch.service /usr/lib/systemd/system/opensearch.service
+              sudo chmod 644 /usr/lib/systemd/system/opensearch.service
+
+      - name: SetupEventingPlugin
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -euo pipefail
+              BUCKET={{EventingPluginBucketName}}
+              KEY={{EventingPluginKey}}
+              S3URI=s3://${BUCKET}/${KEY}
+              echo "Downloading plugin from $S3URI"
+              aws s3 cp $S3URI /tmp/eventing.zip
+              sudo /usr/share/opensearch/bin/opensearch-plugin install --batch file:/tmp/eventing.zip
+
+      - name: SetupS3SnapshotsPlugin
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -euo pipefail
+              sudo /usr/share/opensearch/bin/opensearch-plugin install --batch repository-s3
+
+      - name: CleanSampleFiles
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              ODIR=/etc/opensearch
+              sudo rm $ODIR/opensearch-security/allowlist.yml || true
+              sudo rm $ODIR/opensearch-security/opensearch.yml.example || true
+              sudo rm $ODIR/opensearch-security/internal_users.yml || true
+              sudo rm $ODIR/opensearch-security/config.yml || true
+              sudo rm $ODIR/opensearch-security/roles.yml || true
+              sudo rm $ODIR/opensearch-security/roles_mappings.yml || true
+              sudo rm $ODIR/opensearch.yml
+              sudo rm $ODIR/securityadmin_demo.sh
+              sudo rm $ODIR/kirk.pem || true
+              sudo rm $ODIR/kirk-key.pem || true
+              sudo rm $ODIR/esnode.pem  || true
+              sudo rm $ODIR/esnode-key.pem  || true
+              sudo rm $ODIR/root-ca.pem || true

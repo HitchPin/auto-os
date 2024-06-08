@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v3"
 	"os"
+	"strings"
 )
 
 type Specifics struct {
@@ -48,7 +49,9 @@ func SpecializeOpenSearchConf(input SpecializeOpenSearchConfInput) (*SpecializeO
 		return nil, errors.Wrap(err, "Failed to fetch root CA.")
 	}
 	caSubject := getRootCaRes.Certificate.Subject.String()
-	dnWildcard := "CN=*," + caSubject
+	cnPart := "CN=" + getRootCaRes.Certificate.Subject.CommonName
+	caWithoutCnSubject := strings.Trim(strings.Replace(strings.Replace(caSubject, cnPart, "", 1), ",,", "", 1), ",")
+	dnWildcard := "CN=*," + caWithoutCnSubject
 
 	clusterName, err := getParamValue(input.CommonProps.AwsConf, input.CommonProps.ClusterNameParameterId)
 	if err != nil {
@@ -66,7 +69,7 @@ func SpecializeOpenSearchConf(input SpecializeOpenSearchConfInput) (*SpecializeO
 		dnWildcard,
 	}
 	osConf["plugins.security.authcz.admin_dn"] = []string{
-		"UID=admin," + caSubject,
+		"UID=admin," + caWithoutCnSubject,
 	}
 
 	osConf["eventing.source"] = "maestro"

@@ -62,12 +62,15 @@ func getStoredCertificateAuthority(smClient secretsmanager.Client, secretId stri
 	if err != nil {
 		return nil, err
 	}
-	creds := new(certs.StoredCertificateAuthority)
-	err = json.Unmarshal([]byte(*sv.SecretString), &creds)
+
+	material, err := NewMaterialFromJson(*sv.SecretString)
 	if err != nil {
 		return nil, err
 	}
-	return creds, nil
+	return &certs.StoredCertificateAuthority{
+		CertificatePem: material.PublicKeyPem,
+		PrivateKeyPem:  material.PrivateKeyPem,
+	}, nil
 }
 
 func NewCertSigner(smClient secretsmanager.Client, secretId string) (*certs.CertSigner, *x509.Certificate, error) {
@@ -104,20 +107,19 @@ func loadKeyFromBytes(data []byte) (*rsa.PrivateKey, error) {
 			return nil, errors.New("encountered certificate, was expecting RSA PRIVATE KEY")
 
 		case "PRIVATE KEY":
-			key, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-			if err != nil {
-				return nil, err
-			}
-
-			return key, nil
-
-		case "RSA PRIVATE KEY":
 			key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 			if err != nil {
 				return nil, err
 			}
-			rsaKey := key.(rsa.PrivateKey)
-			return &rsaKey, nil
+			rsaKey := key.(*rsa.PrivateKey)
+			return rsaKey, nil
+
+		case "RSA PRIVATE KEY":
+			key, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+			if err != nil {
+				return nil, err
+			}
+			return key, nil
 
 		default:
 			panic("unknown block type")
@@ -137,4 +139,28 @@ func certBytesToPem(certBytes []byte) (*string, error) {
 	}
 	str := certPEM.String()
 	return &str, nil
+}
+
+type CertMaterialJson struct {
+	PublicKeyPem   string
+	PrivateKeyPem  string
+	KeySize        int
+	ExpirationDays int
+	Serial         string
+	KmsKeyId       string
+}
+
+func (m CertMaterialJson) json() string {
+	jsonBytes, err := json.Marshal(m)
+	if err != nil {
+		panic(err)
+	}
+	return string(jsonBytes)
+}
+func NewMaterialFromJson(j string) (*CertMaterialJson, error) {
+	m := new(CertMaterialJson)
+	err := json.Unmarshal([]byte(j), m)
+	if err != nil {
+	}
+	return m, err
 }

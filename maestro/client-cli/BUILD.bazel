@@ -18,3 +18,19 @@ go_binary(
     embed = [":client-cli_lib"],
     visibility = ["//visibility:public"],
 )
+
+go_binary(
+    name = "bin-x86_64",
+    embed = [":client-cli_lib"],
+    goarch = "amd64",
+    goos = "linux",
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "bin-arm64",
+    embed = [":client-cli_lib"],
+    goarch = "arm64",
+    goos = "linux",
+    visibility = ["//visibility:public"],
+)

@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Pulumi;
 using Summer.Environment;
 using Summer.Environment.KnownTokens;
@@ -14,6 +16,7 @@ public class TestEnvProvider : IEnvProvider
     };
 
     public string[] Keys => awsKeys;
+    public ILogger<T> CreateLogger<T>() => new NullLogger<T>();
 
     public async Task<T> ResolveTokenAsync<T>(Token<T> asdf) => asdf.key switch
     {

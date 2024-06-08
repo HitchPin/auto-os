@@ -1,0 +1,5 @@
+CliWrap
+Pulumi
+Pulumi.AwsNative
+Pulumi.Command
+Microsoft.Extensions.Logging.Abstractions

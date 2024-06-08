@@ -1,11 +1,11 @@
 load(
     "@rules_dotnet//dotnet:defs.bzl",
-    "csharp_binary"
+    "csharp_binary",
 )
 
 SOURCES = glob(
     include = [
-        "*.cs"
+        "*.cs",
     ],
     allow_empty = False,
     exclude = [],
@@ -13,11 +13,11 @@ SOURCES = glob(
 
 csharp_binary(
     name = "bin",
-    out = "Summer.AWSServiceManifest.Demo",
     srcs = SOURCES,
+    out = "Summer.AWSServiceManifest.Demo",
     target_frameworks = ["net8.0"],
-    deps = [
-        "//summer/Summer.AWSServiceManifest:lib"
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//summer/Summer.AWSServiceManifest:lib",
+    ],
 )

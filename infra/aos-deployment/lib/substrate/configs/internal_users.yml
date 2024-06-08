@@ -1,0 +1,16 @@
+---
+# This is the internal user database
+# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh
+
+
+_meta:
+    type: "internalusers"
+    config_version: 2
+
+admin:
+    hash: $2y$12$/IBNiNVbBhBcW4NlTKgvee2YnzuJ5ZTIkv2nCMDCMDgJZWsN/zVSe
+    reserved: true
+    opendistro_security_roles: []
+    backend_roles:
+        - admin
+
