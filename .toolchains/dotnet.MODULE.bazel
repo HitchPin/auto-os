@@ -1,10 +1,5 @@
 "rules_dotnet examples"
-
-bazel_dep(name = "rules_dotnet", version = "0.0.0")
-local_path_override(
-    module_name = "rules_dotnet",
-    path = "../rules_dotnet",
-)
+bazel_dep(name = "rules_dotnet", version = "0.15.1")
 
 dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
 dotnet.toolchain(dotnet_version = "8.0.100")
