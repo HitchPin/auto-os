@@ -1,0 +1,22 @@
+{
+  "name": "@auto-os/snapshot-policy-provider",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.138",
+    "@types/node": "20.11.19",
+    "supports-color": "^9.4.0",
+    "typescript": "~5.3.3",
+    "@auto-os/opensearch-schemas": "workspace:*"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.592.0",
+    "@opensearch-project/opensearch": "^2.9.0"
+  }
+}

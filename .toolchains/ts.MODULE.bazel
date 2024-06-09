@@ -1,5 +1,5 @@
 bazel_dep(name = "rules_nodejs", version = "6.1.1")
-bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc0", dev_dependency = True)  # repeated here only because we use the platforms definitions for rbe
+bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4", dev_dependency = True)  # repeated here only because we use the platforms definitions for rbe
 bazel_dep(name = "aspect_rules_ts", version = "3.0.0-alpha.1")
 bazel_dep(name = "aspect_rules_jest", version = "0.22.0-rc0")
 bazel_dep(name = "aspect_rules_esbuild", version = "0.21.0-rc1")

@@ -1,0 +1,23 @@
+{
+  "name": "@auto-os/aos-opensearch-constructs",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.19",
+    "@types/yargs": "^17.0.32",
+    "aws-cdk-lib": "2.137.0",
+    "constructs": "^10.0.0",
+    "find-up": "^7.0.0",
+    "typescript": "~5.3.3",
+    "@auto-os/opensearch-schemas": "workspace:*"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.137.0",
+    "constructs": "^10.0.0"
+  }
+}

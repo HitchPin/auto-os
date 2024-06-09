@@ -1,0 +1,125 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_run_binary")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+SRC_PATTERNS = [
+    "**/*.json",
+    "**/*.js",
+    "**/*.ts",
+    "**/*.py",
+    "**/*.sh",
+    "**/*.yml",
+    "**/*.yaml",
+    "lib/substrate/configs/*.*",
+]
+
+EX_PATTERNS = [
+    "test/**/*",
+    "node_modules",
+    "cdk.out/**/*",
+    "dist/**/*",
+    ".vscode/**/*",
+]
+
+SOURCES = glob(
+    include = SRC_PATTERNS,
+    allow_empty = True,
+    exclude = EX_PATTERNS,
+)
+
+DEPS = [
+    ":node_modules/@types/node",
+    ":node_modules/aws-cdk",
+    ":node_modules/aws-cdk-lib",
+    ":node_modules/constructs",
+    ":node_modules/source-map-support",
+    ":node_modules/ts-node",
+    ":node_modules/cdk-stacksets",
+    ":node_modules/typescript",
+    "//infra-constructs/admiral-constructs:pkg"
+]
+
+DEPLOY_PROFILE = "auto-os-manager"
+
+js_binary(
+    name = "bin-cdk",
+    copy_data_to_bin = True,
+    # Reference the location where the acorn npm module was linked in the root Bazel package
+    data = SOURCES.extend(DEPS),
+    entry_point = "run-cdk.js",
+    include_npm = True,
+    include_types = True,
+    log_level = "debug",
+)
+
+js_run_binary(
+    # Target name
+    name = "synth",
+    srcs = SOURCES,
+    args = [
+        "synth",
+        "--quiet",
+        "--profile",
+        DEPLOY_PROFILE,
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    execution_requirements = {
+        "requires-network": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-provisioner",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        DEPLOY_PROFILE,
+        "Provisioner"
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-registrar",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "Registrar"
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)

@@ -25,9 +25,10 @@ go_sdk.download(version = "1.21.1")
 go_sdk.host()
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
-go_deps.from_file(go_mod = "//maestro:go.mod")
+go_deps.from_file(go_mod = "//:go.mod")
 use_repo(
     go_deps,
+    "com_github_aws_cloudformation_cloudformation_cli_go_plugin",
     "com_github_aquasecurity_lmdrouter",
     "com_github_aws_aws_lambda_go",
     "com_github_aws_aws_sdk_go",

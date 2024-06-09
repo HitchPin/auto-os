@@ -1,7 +1,0 @@
-Pulumi
-Pulumi.Automation
-Microsoft.Extensions.Logging.Abstractions
-Microsoft.Extensions.DependencyInjection
-Microsoft.Extensions.DependencyInjection.Abstractions
-Microsoft.Extensions.Hosting
-Microsoft.Extensions.Hosting.Abstractions

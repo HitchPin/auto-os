@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "resource",
+    srcs = [
+        "PkiUtils.go",
+        "config.go",
+        "model.go",
+        "resource.go",
+    ],
+    importpath = "github.com/HitchPin/providers/cluster-tls/lbcert-cfn-resource/cmd/resource",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go//service/acm",
+        "@com_github_aws_aws_sdk_go//service/secretsmanager",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler",
+        "@com_github_pkg_errors//:errors",
+    ],
+)

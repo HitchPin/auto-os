@@ -1,0 +1,78 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_cross_binary", "go_library")
+load("@rules_pkg//:pkg.bzl", "pkg_zip")
+
+go_library(
+    name = "lib",
+    deps = [
+        "//providers/cluster-tls/rootca-cfn-resource/cmd:lib"
+    ],
+    embed = [
+        "//providers/cluster-tls/rootca-cfn-resource/cmd:lib"
+    ],
+    importpath = "github.com/HitchPin/providers/cluster-tls/rootca-cfn-resource",
+    visibility = ["//visibility:public"],
+)
+
+# /keep
+go_binary(
+    name = "bin",
+    embed = [":lib"],
+    gotags = ["lambda.norpc"],
+    visibility = ["//visibility:public"],
+)
+
+go_cross_binary(
+    name = "lambda_arm",
+    platform = "@io_bazel_rules_go//go/toolchain:linux_arm64",
+    target = ":bin",
+)
+
+copy_file(
+    # Name of the rule.
+    name = "copy_arm",
+    # A Label
+    src = ":lambda_arm",
+    # Path of the output file, relative to this package.
+    out = "bootstrap",
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":copy_arm",
+    ],
+    package_file_name = "handler.zip",
+    visibility = ["//visibility:public"],
+)
+
+copy_file(
+    # Name of the rule.
+    name = "schema-json",
+    # A Label
+    src = "hitchpin-autoos-rootca.json",
+    # Path of the output file, relative to this package.
+    out = "schema.json",
+)
+
+pkg_zip(
+    name = "resourceProvider",
+    srcs = [
+        ":zip",
+        ":schema-json",
+        ".rpdk-config"
+    ],
+    package_file_name = "bundle.zip",
+    visibility = ["//visibility:public"],
+)
+
+copy_file(
+    # Name of the rule.
+    name = "resourceRoleStack",
+    # A Label
+    src = "resource-role.yaml",
+    # Path of the output file, relative to this package.
+    out = "stack.yml",
+    visibility = ["//visibility:public"],
+)
+

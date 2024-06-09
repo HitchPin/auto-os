@@ -1,1 +1,23 @@
-bazel_dep(name = "rules_nixpkgs_core", version = "0.11.1")
+bazel_dep(
+    # https://bazel.build/external/overview#bzlmod
+    name = "rules_nixpkgs_core",
+    version = "0.11.1",
+)
+bazel_dep(
+    # needed by `nixpkgs_*_configure` as long as they are not module extensions yet. to do, test.
+    name = "platforms",
+    version = "0.0.10",
+)
+
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_repo.file(
+    name = "nixpkgs",
+    file = "//nix/nixpkgs:default.nix",
+)
+use_repo(nix_repo, "nixpkgs")
+
+non_module_dev_deps = use_extension("//:non_modules_extensions.bzl", "non_module_dev_deps")
+use_repo(
+    non_module_dev_deps,
+    "graphviz"
+)

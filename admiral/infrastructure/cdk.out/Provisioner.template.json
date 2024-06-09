@@ -1,0 +1,53 @@
+{
+ "Resources": {
+  "Org": {
+   "Type": "AWS::Organizations::Organization",
+   "Metadata": {
+    "aws:cdk:path": "Provisioner/Org"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/03ISw5AMBAA0LPYt6NYOIADSDiAjCoZn2nSKRLi7hY2Vi95OWRFCSbBU7QdFr1SD3cb0S4KT+l8mJDpwkieBaqR61+oauTGid+DdY9iPziYJT1yA5kBk8xCpMPOkTYHzecLEhqCoW8AAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "Provisioner/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

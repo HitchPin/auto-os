@@ -1,6 +1,0 @@
-group Testing
-    coverlet.collector
-    Microsoft.NET.Test.Sdk
-    NSubstitute
-    xunit
-    xunit.runner.visualstudio

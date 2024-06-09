@@ -1,9 +1,0 @@
-Pulumi
-Pulumi.Automation
-Pulumi.AwsNative
-Microsoft.Extensions.Logging.Console
-Microsoft.Extensions.Logging.Abstractions
-Microsoft.Extensions.DependencyInjection
-Microsoft.Extensions.DependencyInjection.Abstractions
-Microsoft.Extensions.Hosting
-Microsoft.Extensions.Hosting.Abstractions

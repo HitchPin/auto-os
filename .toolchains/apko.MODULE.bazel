@@ -4,6 +4,6 @@ apko = use_extension("@rules_apko//apko:extensions.bzl", "apko")
 
 apko.translate_lock(
     name = "runner_lock",
-    lock = "//infra/runner-container-image:image.lock.json",
+    lock = "//providers/maestro-runner/container-image:image.lock.json",
 )
 use_repo(apko, "runner_lock")

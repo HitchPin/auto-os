@@ -1,0 +1,58 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+SRC_PATTERNS = [
+    "package.json",
+    "src/**/*.ts",
+]
+
+TEST_PATTERNS = [
+    "test/**/*.spec.ts",
+]
+
+SOURCES = glob(
+    include = SRC_PATTERNS,
+    allow_empty = True,
+    exclude = TEST_PATTERNS,
+)
+
+filegroup(
+    name = "assets",
+    srcs = [
+        "src/internal/handler.py",
+        "src/internal/env_introspector.py",
+        "src/internal/param_linker.py",
+        "//maestro/client-cli",
+        "//maestro/client-cli:bin-arm64",
+        "//maestro/client-cli:bin-x86_64",
+        "//plugins/eventing-plugin:zip",
+        "//providers/maestro-runner/container-image:tarball",
+    ],
+)
+
+ts_project(
+    name = "pkg",
+    srcs = SOURCES,
+    assets = [
+        ":assets",
+    ],
+    data = [
+        ":node_modules/aws-cdk-lib",
+    ],
+    declaration = True,
+    declaration_dir = "dist",
+    out_dir = "dist",
+    root_dir = "src",
+    transpiler = "tsc",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":node_modules/@types/node",
+        ":node_modules/@types/yargs",
+        ":node_modules/aws-cdk-lib",
+        ":node_modules/constructs",
+        ":node_modules/find-up",
+        ":node_modules/typescript",
+    ],
+)

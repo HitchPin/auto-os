@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "lib",
+    srcs = ["main.go"],
+    # /keep
+    importpath = "github.com/HitchPin/providers/cluster-tls/lbcert-cfn-resource/cmd",
+    deps = [
+        # /keep
+        "//providers/cluster-tls/lbcert-cfn-resource/cmd/resource:resource",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn:go_default_library",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler:go_default_library",
+    ],
+    # /keep
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "cmd",
+    # /keep
+    embed = [":lib"],
+    visibility = ["//visibility:public"],
+)

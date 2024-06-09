@@ -1,0 +1,1 @@
+export { shortHashOfFile } from './idUtils';

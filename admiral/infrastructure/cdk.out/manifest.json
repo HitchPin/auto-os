@@ -1,0 +1,71 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "Provisioner.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "Provisioner.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "Provisioner": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://533267097423/us-east-2",
+      "properties": {
+        "templateFile": "Provisioner.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::533267097423:role/cdk-hnb659fds-deploy-role-533267097423-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::533267097423:role/cdk-hnb659fds-cfn-exec-role-533267097423-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-533267097423-us-east-2/a78b0a9ce6823c1aae1e0215d2ad3a96709f9ef9072bc91b4105dbfccfdb26ef.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "Provisioner.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::533267097423:role/cdk-hnb659fds-lookup-role-533267097423-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "Provisioner.assets"
+      ],
+      "metadata": {
+        "/Provisioner/Org": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Org"
+          }
+        ],
+        "/Provisioner/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/Provisioner/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/Provisioner/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "Provisioner"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
