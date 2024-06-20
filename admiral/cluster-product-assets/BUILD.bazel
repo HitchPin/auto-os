@@ -1,0 +1,48 @@
+load("@rules_pkg//pkg:mappings.bzl", "pkg_filegroup", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+
+copy_file(
+    name = "maestro-api-zip",
+    src = "//maestro/lambda:lambda",
+    out = "maestro-api.zip",
+)
+copy_file(
+    name = "event-forwarder-zip",
+    src = "//handlers/event-forwarder:zip",
+    out = "event-forwarder.zip",
+)
+copy_file(
+    name = "disco-cleanup-zip",
+    src = "//handlers/disco-cleanup:zip",
+    out = "disco-cleanup.zip",
+)
+
+pkg_files(
+    name = "base-config",
+    srcs = [
+        "//cluster-baseline-config:bundle_files",
+    ],
+    prefix = "base-config",
+    strip_prefix = strip_prefix.from_pkg(),
+)
+pkg_files(
+    name = "control-plane",
+    srcs = [
+        ":event-forwarder-zip",
+        ":disco-cleanup-zip",
+        ":maestro-api-zip",
+    ],
+    prefix = "control-plane",
+    strip_prefix = strip_prefix.from_pkg(),
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":base-config",
+        ":control-plane",
+    ],
+    package_file_name = "bundle.zip",
+    visibility = ["//visibility:public"],
+)

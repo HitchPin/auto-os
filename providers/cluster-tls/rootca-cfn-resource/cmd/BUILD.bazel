@@ -1,23 +1,35 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "lib",
-    srcs = ["main.go"],
-    # /keep
-    importpath = "github.com/HitchPin/providers/cluster-tls/rootca-cfn-resource/cmd",
-    deps = [
-        # /keep
-        "//providers/cluster-tls/rootca-cfn-resource/cmd/resource:resource",
-        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn:go_default_library",
-        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler:go_default_library",
+    name = "cmd_lib",
+    srcs = [
+        "cfn.go",
+        "event.go",
+        "main.go",
+        "reportErr.go",
+        "response.go",
     ],
-    # /keep
+    importpath = "github.com/HitchPin/providers/cluster-tls/rootca-cfn-resource/cmd",
     visibility = ["//visibility:public"],
+    deps = [
+        "//providers/cluster-tls/rootca-cfn-resource/cmd/logging",
+        "//providers/cluster-tls/rootca-cfn-resource/cmd/resource",
+        "@com_github_aws_aws_lambda_go//lambda",
+        "@com_github_aws_aws_sdk_go//service/cloudformation",
+        "@com_github_aws_aws_sdk_go//service/cloudwatch",
+        "@com_github_aws_aws_sdk_go//service/cloudwatchlogs",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/cfnerr",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/credentials",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/encoding",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/logging",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/metrics",
+        "@in_gopkg_validator_v2//:validator_v2",
+    ],
 )
 
 go_binary(
     name = "cmd",
-    # /keep
-    embed = [":lib"],
+    embed = [":cmd_lib"],
     visibility = ["//visibility:public"],
 )

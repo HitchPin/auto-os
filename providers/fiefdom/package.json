@@ -1,0 +1,21 @@
+{
+  "name": "@auto-os/fiefdom-provider",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@auto-os/opensearch-schemas": "workspace:*",
+    "@types/aws-lambda": "^8.10.138",
+    "@types/node": "20.11.19",
+    "typescript": "~5.3.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-controltower": "^3.596.0",
+    "zod": "^3.23.8"
+  }
+}

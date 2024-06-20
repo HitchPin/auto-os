@@ -6,9 +6,9 @@
       "es2020",
       "dom"
     ],
+    "rootDir": "src/",
     "outDir": "dist/",
     "declaration": true,
-    "declarationDir": "dist/",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -22,12 +22,16 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "types": ["node"],
     "typeRoots": [
       "./node_modules/@types"
     ]
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "dist",
+    "test",
+    "bin"
   ]
 }

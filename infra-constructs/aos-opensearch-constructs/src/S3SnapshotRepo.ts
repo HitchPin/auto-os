@@ -1,4 +1,4 @@
-import { aws_ec2 as ec2, aws_s3 as s3, aws_iam as iam, aws_lambda as lambda, custom_resources as cr, CustomResource } from "aws-cdk-lib";
+import { aws_s3 as s3, aws_iam as iam, aws_lambda as lambda, custom_resources as cr, CustomResource } from "aws-cdk-lib";
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from "constructs";
 import * as path from 'path';
@@ -7,7 +7,7 @@ import type { IClusterEndpoint } from "./ClusterEndpoint";
 const getBazelHandlerPath = (): string => {
     return path.join(
       __dirname,
-      "./providers/opensearch/s3-snapshot-repo/package.zip"
+      "../dist/providers/opensearch/s3-snapshot-repo/package.zip"
     );
 }
 

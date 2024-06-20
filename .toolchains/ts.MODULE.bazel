@@ -1,11 +1,10 @@
 bazel_dep(name = "rules_nodejs", version = "6.1.1")
+
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4", dev_dependency = True)  # repeated here only because we use the platforms definitions for rbe
+
 bazel_dep(name = "aspect_rules_ts", version = "3.0.0-alpha.1")
 bazel_dep(name = "aspect_rules_jest", version = "0.22.0-rc0")
 bazel_dep(name = "aspect_rules_esbuild", version = "0.21.0-rc1")
-
-tc = use_extension("@aspect_rules_js//js:toolchains.bzl", "tc", dev_dependency = True)
-tc.rules_js_register_toolchains()
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
 npm.npm_translate_lock(
@@ -17,7 +16,5 @@ npm.npm_translate_lock(
 use_repo(npm, "npm")
 
 rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_dependency = True)
-
 rules_ts_ext.deps()
-
 use_repo(rules_ts_ext, "npm_typescript")

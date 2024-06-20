@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import {
-    aws_ec2 as ec2
+    aws_ec2 as ec2,
+    aws_kms as kms
 } from 'aws-cdk-lib';
 import * as ami from './internal';
 
@@ -9,11 +10,15 @@ export interface IBakedAmi {
   readonly arm_64ImageId: string;
 }
 
+interface BakedAmiProps {
+  encryptionKey: kms.IKey
+}
+
 export class BakedAmi extends Construct implements IBakedAmi {
   readonly x86_64ImageId: string;
   readonly arm_64ImageId: string;
 
-  constructor(parent: Construct, name: string) {
+  constructor(parent: Construct, name: string, props: BakedAmiProps) {
     super(parent, name);
 
     const maestro = new ami.MaestroCliComponent(this, "Maestro");
@@ -33,6 +38,7 @@ export class BakedAmi extends Construct implements IBakedAmi {
       return new ami.AmiBakery(this, `Pipeline_${arch}`, {
         name: `Pipeline-${arch}`,
         shareWithOrg: true,
+        encryptionKey: props.encryptionKey,
         amiOptions: {
           architecture: arch,
           baseImage: ec2.MachineImage.latestAmazonLinux2023({

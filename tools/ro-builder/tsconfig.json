@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "target": "ES2020",
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "rootDir": ".",
+        "outDir": "dist/",
+        "declarationDir": "dist/"
+    },
+    "include": ["src/"]
+}

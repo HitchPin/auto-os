@@ -36,6 +36,13 @@ Resources:
                 - "kms:Decrypt"
                 - "kms:GenerateDataKey"
                 - "secretsmanager:GetSecretValue"
+                - "logs:CreateLogGroup"
+                - "logs:CreateLogStream"
+                - "logs:DescribeLogGroups"
+                - "logs:DescribeLogStreams"
+                - "logs:PutLogEvents"
+                - "cloudwatch:ListMetrics"
+                - "cloudwatch:PutMetricData"
                 Resource: "*"
 Outputs:
   ExecutionRoleArn:

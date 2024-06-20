@@ -300,7 +300,7 @@ export class ImagePipeline extends Construct {
         },
       };
     }
-    if (!!props.organizationSharing) {
+    if (props.organizationSharing) {
       let launchPermissionConfig: imagebuilder.CfnDistributionConfiguration.LaunchPermissionConfigurationProperty;
       if ('orgArn' in props.organizationSharing) {
         launchPermissionConfig = {

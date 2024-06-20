@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import {
     aws_ssm as ssm,
+    aws_ecr as ecr,
     aws_iam as iam,
     Token,
 } from 'aws-cdk-lib';
@@ -15,6 +16,8 @@ export type Hydration = {
 export interface MaestroAdminInvocationProps {
   hydration: Hydration;
   cliCommand: string;
+  invocationProjectRepo: ecr.IRepository;
+  invocationProjectTag: string;
 }
 
 export interface IMaestroAdminInvocation {
@@ -45,7 +48,10 @@ export class MaestroAdminInvocation extends Construct {
     const proj = new internal.MaestroAdminSingletonCodeBuildProject(
       this,
       "Project",
-      {}
+      {
+        buildImageRepo: props.invocationProjectRepo,
+        tag: props.invocationProjectTag
+      }
     );
 
     const role = new iam.Role(this, "Role", {

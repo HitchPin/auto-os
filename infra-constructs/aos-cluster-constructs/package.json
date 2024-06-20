@@ -1,16 +1,12 @@
 {
-  "name": "@auto-os/aos-deployment",
+  "name": "@auto-os/aos-cluster-constructs",
   "version": "0.1.0",
-  "bin": {
-    "aos-deployment": "bin/aos-deployment.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-community/ephemeral": "^2.1.0",
     "@aws/pdk": "^0.23.38",
     "@types/node": "20.11.19",
     "aws-cdk": "2.137.0",

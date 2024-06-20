@@ -1,0 +1,154 @@
+import { Fn } from 'aws-cdk-lib';
+import * as ecr_assets from 'aws-cdk-lib/aws-ecr-assets';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { Construct } from 'constructs';
+import { LoginConfig } from './login';
+
+/**
+ * Source information
+ */
+export interface SourceConfig {
+  /**
+   * The source image URI.
+   */
+  readonly imageUri: string;
+
+  /**
+   * The login command and region.
+   */
+  readonly loginConfig: LoginConfig;
+
+  /**
+   * The source tag.
+   */
+  readonly imageTag: string;
+}
+
+/**
+ * Bind context for Source
+ */
+export interface SourceContext {
+  /**
+   * The role for the handler.
+   */
+  readonly handlerRole: iam.IRole;
+}
+
+/**
+ * Specifies docker image deployment source
+ *
+ * Usage:
+ *
+ * ```ts
+ * import * as path from 'path';
+ * const path = path.join(__dirname, 'path/to/directory');
+ * const sourceDirectory = Source.directory(path);
+ * ```
+ * or with additional `assetOptions`
+ * ```ts
+ * import * as path from 'path';
+ * const path = path.join(__dirname, 'path/to/directory');
+ * const sourceDirectory = Source.directory(path, {
+ *   file: 'Dockerfile.api',
+ *   buildArgs: {
+ *     HTTP_PROXY: 'http://10.20.30.2:1234'
+ *   }
+ * })
+ * ```
+ */
+export abstract class Source {
+  /**
+   * Uses a local image built from a Dockerfile in a local directory as the source.
+   *
+   * @param path - path to the directory containing your Dockerfile (not a path to a file)
+   * @param assetOptions - specify any additional [DockerImageAssetOptions](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecr_assets.DockerImageAssetOptions.html) (except `path`)
+   */
+  public static directory(
+    path: string,
+    assetOptions?: ecr_assets.DockerImageAssetOptions,
+  ): Source {
+    return new DirectorySource(path, assetOptions);
+  }
+
+    /**
+   * Uses a local tarball  as the source.
+   *
+   * @param path - path to the tarball
+   * @param assetOptions - specify any additional [DockerImageAssetOptions](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecr_assets.DockerImageAssetOptions.html) (except `path`)
+   */
+    public static tarball(
+      path: string,
+      assetOptions?: ecr_assets.TarballImageAssetProps,
+    ): Source {
+      return new TarballSource(path, assetOptions);
+    }
+  
+  /**
+   * Bind grants the CodeBuild role permissions to pull from a repository if necessary.
+   * Bind should be invoked by the caller to get the SourceConfig.
+   */
+  public abstract bind(scope: Construct, context: SourceContext): SourceConfig;
+}
+
+/**
+ * Source of docker image deployment is a local image from a directory
+ */
+class DirectorySource extends Source {
+  private assetProps: ecr_assets.DockerImageAssetProps;
+
+  constructor(path: string, assetOptions?: ecr_assets.DockerImageAssetOptions) {
+    super();
+    this.assetProps = {
+      directory: path,
+      ...assetOptions,
+    };
+  }
+
+  public bind(scope: Construct, context: SourceContext): SourceConfig {
+    const asset = new ecr_assets.DockerImageAsset(scope, 'asset', this.assetProps);
+
+    const accountId = asset.repository.env.account;
+    const region = asset.repository.env.region;
+
+    asset.repository.grantPull(context.handlerRole);
+
+    return {
+      imageUri: asset.imageUri,
+      loginConfig: {
+        loginCommand: `aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${accountId}.dkr.ecr.${region}.amazonaws.com`,
+        region: region,
+      },
+      imageTag: Fn.select(1, Fn.split(':', asset.imageUri)), // uri will be something like 'directory/of/image:tag' so this picks out the tag from the token
+    };
+  }
+}
+
+class TarballSource extends Source {
+  private assetProps: ecr_assets.TarballImageAssetProps;
+
+  constructor(file: string, assetOptions?: ecr_assets.TarballImageAssetProps) {
+    super();
+    this.assetProps = {
+      tarballFile: file,
+      ...assetOptions,
+    };
+  }
+
+  public bind(scope: Construct, context: SourceContext): SourceConfig {
+    const asset = new ecr_assets.TarballImageAsset(scope, 'asset', this.assetProps);
+
+    const accountId = asset.repository.env.account;
+    const region = asset.repository.env.region;
+
+    asset.repository.grantPull(context.handlerRole);
+
+    return {
+      imageUri: asset.imageUri,
+      loginConfig: {
+        loginCommand: `aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${accountId}.dkr.ecr.${region}.amazonaws.com`,
+        region: region,
+      },
+      imageTag: Fn.select(1, Fn.split(':', asset.imageUri)), // uri will be something like 'directory/of/image:tag' so this picks out the tag from the token
+    };
+  }
+}

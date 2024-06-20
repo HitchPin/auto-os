@@ -1,117 +1,69 @@
-load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_run_binary")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@npm//:defs.bzl", "npm_link_all_packages")
-load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+
 npm_link_all_packages(name = "node_modules")
 
 SRC_PATTERNS = [
-    "*.js",
-    "**/*.json",
-    "**/*.js",
-    "**/*.ts",
-    "**/*.py",
-    "**/*.sh",
-    "**/*.yml",
-    "**/*.yaml",
-    "lib/substrate/configs/*.*",
+    "package.json",
+    "src/**/*.ts",
+    "src/**/*.sh",
 ]
 
-EX_PATTERNS = [
-    "test/**/*",
-    "node_modules",
-    "cdk.out/**/*",
-    "dist/**/*",
-    ".vscode/**/*",
+TEST_PATTERNS = [
+    "test/**/*.spec.ts",
 ]
 
 SOURCES = glob(
     include = SRC_PATTERNS,
     allow_empty = True,
-    exclude = EX_PATTERNS,
+    exclude = TEST_PATTERNS,
 )
 
-DEPS = [
-    ":node_modules/@types/node",
-    ":node_modules/@aws/pdk",
-    ":node_modules/aws-cdk",
-    ":node_modules/aws-cdk-lib",
-    ":node_modules/@aws-community/ephemeral",
-    ":node_modules/cron-validate",
-    ":node_modules/constructs",
-    ":node_modules/source-map-support",
-    ":node_modules/ts-node",
-    ":node_modules/typescript",
-    ":node_modules/zod",
-    "//infra-constructs/aos-internal-constructs:pkg",
-    "//infra-constructs/aos-opensearch-constructs:pkg",
-    "//infra-constructs/aos-ami-constructs:pkg",
-    "//maestro/lambda:lambda"
-]
-
-js_binary(
-    name = "bin-cdk",
-    copy_data_to_bin = True,
-    entry_point = "run-cdk.js",
-    include_npm = True,
-    include_types = True,
-    log_level = "debug",
-)
-
-js_run_binary(
-    # Target name
-    name = "synth",
-    srcs = SOURCES + DEPS,
-    args = [
-        "synth",
-        "--quiet",
-        "--profile",
-        "hitchpin"
+filegroup(
+    name = "assets",
+    srcs = [
+        "src/dataPlane/setup/bootstrapper-setup.sh",
+        "src/dataPlane/setup/node-setup.sh",
+        "//handlers/disco-cleanup:zip",
+        "//handlers/event-forwarder:zip",
+        "//infra-constructs/aos-ami-constructs:assets",
+        "//infra-constructs/aos-internal-constructs:assets",
+        "//infra-constructs/aos-opensearch-constructs:assets",
+        "//maestro/lambda",
     ],
-    chdir = package_name(),
-    copy_srcs_to_bin = True,
-    env = {
-        "MAESTRO_LAMBDA_LOC": "$(location //maestro/lambda:lambda)"
-    },
-    execution_requirements = {
-        "requires-network": "yes",
-    },
-    include_types = True,
-    log_level = "debug",
-    out_dirs = ["cdk.out"],
-    silent_on_success = False,
-    tool = ":bin-cdk",
-    use_execroot_entry_point = True
 )
 
-js_run_binary(
-    # Target name
-    name = "deploy",
+ts_project(
+    name = "pkg",
     srcs = SOURCES,
-    args = [
-        "deploy",
-        "--profile",
-        "hp-resource-providers",
-        "--parameters",
-        "*:ClusterName=HpBeta",
-        "--parameters",
-        "*:ClusterId=abc123",
-        "--parameters",
-        "*:ClusterDnsRoot=search.internal.hitchpin.com",
-        "Foundation",
-        "Substrate",
-        "ControlPlane",
-        "DataPlane",
-        "Management",
+    assets = [
+        ":assets",
     ],
-    chdir = package_name(),
-    copy_srcs_to_bin = True,
-    execution_requirements = {
-        "requires-network": "yes",
-        "no-sandbox": "yes",
-    },
-    include_types = True,
-    log_level = "debug",
-    out_dirs = ["cdk.out"],
-    silent_on_success = False,
-    tool = ":bin-cdk",
-    use_execroot_entry_point = True,
+    data = [
+        ":node_modules/aws-cdk-lib",
+    ],
+    declaration = True,
+    declaration_dir = "dist",
+    out_dir = "dist",
+    root_dir = "src",
+    transpiler = "tsc",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":node_modules/@aws/pdk",
+        ":node_modules/@types/node",
+        ":node_modules/aws-cdk",
+        ":node_modules/aws-cdk-lib",
+        ":node_modules/constructs",
+        ":node_modules/cron-validate",
+        ":node_modules/source-map-support",
+        ":node_modules/ts-node",
+        ":node_modules/typescript",
+        ":node_modules/zod",
+        "//handlers/disco-cleanup:zip",
+        "//handlers/event-forwarder:zip",
+        "//infra-constructs/aos-ami-constructs:pkg",
+        "//infra-constructs/aos-internal-constructs:pkg",
+        "//infra-constructs/aos-opensearch-constructs:pkg",
+        "//maestro/lambda",
+    ],
 )

@@ -35,6 +35,7 @@ interface ResourceProviderUploaderProps {
 export class ResourceProviderUploader extends Construct {
   readonly handlerKey: string;
   readonly stackFile: string;
+  readonly deployment: s3deploy.BucketDeployment;
 
   constructor(
     parent: Construct,
@@ -45,14 +46,14 @@ export class ResourceProviderUploader extends Construct {
 
     const paths = getBazelArtifactOf(props.resourceProvider);
 
-    const providerAsset = s3deploy.Source.asset(paths.handlerZip);
-    new s3deploy.BucketDeployment(this, `${props.resourceProvider}Deployment`, {
+    const providerAsset = s3deploy.Source.asset(path.dirname(paths.handlerZip));
+    this.deployment = new s3deploy.BucketDeployment(this, `${props.resourceProvider}Deployment`, {
       sources: [providerAsset],
       destinationBucket: props.orgBucket,
       destinationKeyPrefix: paths.bucketPrefix,
     });
 
-    this.handlerKey = paths.bucketPrefix + "handler.zip";
+    this.handlerKey = paths.bucketPrefix + "bundle.zip";
     this.stackFile = paths.resourceStackYaml;
   }
 }

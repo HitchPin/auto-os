@@ -1,9 +1,12 @@
 bazel_dep(name = "rules_apko", version = "1.2.3")
 
 apko = use_extension("@rules_apko//apko:extensions.bzl", "apko")
-
 apko.translate_lock(
-    name = "runner_lock",
-    lock = "//providers/maestro-runner/container-image:image.lock.json",
+    name = "runner_arm64_lock",
+    lock = "//providers/maestro-runner/container-image:image-arm64.lock.json",
 )
-use_repo(apko, "runner_lock")
+apko.translate_lock(
+    name = "runner_x86_64_lock",
+    lock = "//providers/maestro-runner/container-image:image-x86_64.lock.json",
+)
+use_repo(apko, "runner_arm64_lock", "runner_x86_64_lock")

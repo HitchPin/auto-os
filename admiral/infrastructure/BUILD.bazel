@@ -36,8 +36,20 @@ DEPS = [
     ":node_modules/source-map-support",
     ":node_modules/ts-node",
     ":node_modules/cdk-stacksets",
+    ":node_modules/cdk-remote-stack",
+    ":node_modules/cdk-ecr-deployment",
+    ":node_modules/@seeebiii/ses-verify-identities",
     ":node_modules/typescript",
-    "//infra-constructs/admiral-constructs:pkg"
+    ":node_modules/@aws-cdk/app-staging-synthesizer-alpha",
+    "//handlers/account-mail-processor:zip",
+    "//infra-constructs/admiral-constructs:pkg",
+    "//infra-constructs/aos-ami-constructs:pkg",
+    "//infra-constructs/aos-internal-constructs:pkg",
+    "//infra-constructs/aos-cluster-constructs:pkg",
+    "//providers/maestro-runner/container-image:amd64-tarball",
+    "//handlers/image-deployer:zip",
+    "//admiral/cluster-product-assets:zip",
+    "//admiral/api:zip",
 ]
 
 DEPLOY_PROFILE = "auto-os-manager"
@@ -53,6 +65,13 @@ js_binary(
     log_level = "debug",
 )
 
+ENVS = {
+    "BUNDLED_ASSETS_LOC": "$(location //admiral/cluster-product-assets:zip)",
+    "ADMIRAL_API_LAMBDA_LOC": "$(location //admiral/api:zip)",
+    "IMAGE_DEPLOYER_LOC": "$(location //handlers/image-deployer:zip)",
+    "MAESTRO_RUNNER_TAR": "$(location //providers/maestro-runner/container-image:amd64-tarball)",
+}
+
 js_run_binary(
     # Target name
     name = "synth",
@@ -65,6 +84,7 @@ js_run_binary(
     ],
     chdir = package_name(),
     copy_srcs_to_bin = True,
+    env = ENVS,
     execution_requirements = {
         "requires-network": "yes",
     },
@@ -84,10 +104,36 @@ js_run_binary(
         "deploy",
         "--profile",
         DEPLOY_PROFILE,
-        "Provisioner"
+        "Provisioner",
     ],
     chdir = package_name(),
     copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-forge",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "Forge",
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
     execution_requirements = {
         "requires-network": "yes",
         "no-sandbox": "yes",
@@ -108,10 +154,138 @@ js_run_binary(
         "deploy",
         "--profile",
         "auto-os-administration",
-        "Registrar"
+        "Registrar",
     ],
     chdir = package_name(),
     copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-account-factory",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "BaseInfrastructure",
+        "AccountFactory",
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-base-infra",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "BaseInfrastructure"
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-offering",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "Offering",
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-api",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "ApiCerts",
+        "Api",
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
+    execution_requirements = {
+        "requires-network": "yes",
+        "no-sandbox": "yes",
+    },
+    include_types = True,
+    log_level = "debug",
+    out_dirs = ["cdk.out"],
+    silent_on_success = False,
+    tool = ":bin-cdk",
+    use_execroot_entry_point = True,
+)
+
+js_run_binary(
+    # Target name
+    name = "deploy-cicd",
+    srcs = SOURCES,
+    args = [
+        "deploy",
+        "--profile",
+        "auto-os-administration",
+        "Cicd"
+    ],
+    chdir = package_name(),
+    copy_srcs_to_bin = True,
+    env = ENVS,
     execution_requirements = {
         "requires-network": "yes",
         "no-sandbox": "yes",

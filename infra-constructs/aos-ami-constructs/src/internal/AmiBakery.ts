@@ -3,7 +3,7 @@ import { ImagePipeline, OrganizationSharingProps }from './CdkImagePipeline';
 import {
   aws_iam as iam,
   aws_ec2 as ec2,
-  aws_s3 as s3,
+  aws_kms as kms,
   aws_imagebuilder as imgb,
   RemovalPolicy,
 } from "aws-cdk-lib";
@@ -22,6 +22,7 @@ interface AmiBakeryProps {
   components: imgb.CfnImageRecipe.ComponentConfigurationProperty[],
   additionalPolicies: iam.PolicyStatement[];
   shareWithOrg: boolean;
+  encryptionKey: kms.IKey
 }
 
 export class AmiBakery extends Construct {
@@ -55,11 +56,13 @@ export class AmiBakery extends Construct {
       instanceTypes: [props.amiOptions.instanceType.toString()],
       components: props.components,
       parentImage: ami.imageId,
+      distributionRegions: ['us-east-2'],
       ebsVolumeConfigurations: [
         {
           deviceName: "/dev/xvda",
           ebs: {
             encrypted: true,
+            kmsKeyId: props.encryptionKey.keyId,
             volumeSize: 64,
             volumeType: "gp3",
           },

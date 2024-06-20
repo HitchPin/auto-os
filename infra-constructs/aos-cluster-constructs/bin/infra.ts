@@ -31,13 +31,6 @@ if (isDiagramMode()) {
   });
 }
 
-const foundation = new stacks.FoundationStack(app, "Foundation");
-/*
-const bakery = new stacks.BakeryStack(app, "Bakery", {
-  amdParam: foundation.amdParam,
-  armParam: foundation.armParam
-});
-*/
 const substrate = new stacks.SubstrateStack(app, "Substrate");
 const cpStack = new stacks.ControlPlaneStack(app, 'ControlPlane', {
     vpc: substrate.vpc,

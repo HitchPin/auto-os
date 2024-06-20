@@ -1,0 +1,28 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@rules_pkg//:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//:pkg.bzl", "pkg_zip")
+
+filegroup(
+    name = "py_src",
+    srcs = [
+        "cleanup.py",
+    ],
+)
+
+pkg_files(
+    name = "bundle-files",
+    srcs = [
+        ":py_src",
+    ],
+    strip_prefix = strip_prefix.files_only(),
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":bundle-files",
+    ],
+    package_file_name = "package.zip",
+    visibility = ["//visibility:public"],
+)

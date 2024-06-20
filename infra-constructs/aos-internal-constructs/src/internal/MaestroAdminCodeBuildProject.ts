@@ -4,6 +4,7 @@ import {
     aws_codebuild as cb,
     aws_s3 as s3,
     aws_iam as iam,
+    aws_ecr as ecr,
     aws_logs as logs,
     Names,
     Aws,
@@ -11,9 +12,9 @@ import {
 } from 'aws-cdk-lib';
 import * as path from 'path';
 
-const getBazelTarballPath = () => {
-    const tar = path.join(__dirname, '../providers/maestro-runner/container-image/container-image/tarball.tar');
-    return tar;
+interface MaestroAdminCodeBuildProjectProps {
+  buildImageRepo: ecr.IRepository,
+  tag: string
 }
 
 export class MaestroAdminCodeBuildProject extends Construct {
@@ -22,15 +23,10 @@ export class MaestroAdminCodeBuildProject extends Construct {
   readonly commonInvocationPermissions: iam.ManagedPolicy;
   readonly logGroup: logs.ILogGroup;
 
-  constructor(parent: Construct, name: string, props: {}) {
+  constructor(parent: Construct, name: string, props: MaestroAdminCodeBuildProjectProps) {
     super(parent, name);
-    const imageAsset = new assets.TarballImageAsset(this, "ImageAsset", {
-      tarballFile: getBazelTarballPath(),
-    });
-    const cbImage = cb.LinuxArmBuildImage.fromEcrRepository(
-      imageAsset.repository,
-      imageAsset.imageTag
-    );
+    
+    const cbImage = cb.LinuxArmBuildImage.fromEcrRepository(props.buildImageRepo, props.tag);
 
     const nameRoot = Names.uniqueResourceName(this, {
       allowedSpecialCharacters: "-",

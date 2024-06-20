@@ -1,7 +1,8 @@
 import {
     aws_organizations as org,
     aws_iam as iam,
-    custom_resources as cr
+    custom_resources as cr,
+    Aws
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { FleetTrustedServices } from "./FleetTrustedServices";
@@ -65,5 +66,27 @@ export class AdmiralFleet extends Construct {
     this.delegatedAdmin = newAccount(props.accountsNames.delegatedAdmin);
     this.loggingAccount = newAccount(props.accountsNames.logging);
     this.securityAccount = newAccount(props.accountsNames.security);
+
+    new iam.Role(this, 'Role', {
+      roleName: 'AccountCreationRole',
+      assumedBy: new iam.AccountPrincipal(this.delegatedAdmin.attrAccountId),
+      inlinePolicies: {
+        'account-creator': new iam.PolicyDocument({
+          statements: [ new iam.PolicyStatement({
+            actions: [
+              'organizations:CreateAccount',
+              'organizations:TagResource',
+              'organizations:DescribeAccount',
+              'organizations:DescribeCreateAccountStatus',
+              'organizations:MoveAccount',
+              'organizations:DescribeOrganization',
+              "iam:CreateServiceLinkedRole",
+              "sts:AssumeRole"
+            ],
+            resources: [ '*' ]
+          })]
+        })
+      }
+    });
   }
 }

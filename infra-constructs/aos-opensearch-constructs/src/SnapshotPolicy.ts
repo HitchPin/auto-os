@@ -1,18 +1,18 @@
-import { aws_ec2 as ec2, aws_s3 as s3, aws_iam as iam, aws_lambda as lambda, custom_resources as cr, CustomResource } from "aws-cdk-lib";
+import { aws_iam as iam, aws_lambda as lambda, custom_resources as cr, CustomResource } from "aws-cdk-lib";
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from "constructs";
 import * as path from 'path';
-import type { IClusterEndpoint } from "./ClusterEndpoint";
+import { IClusterEndpoint } from "./ClusterEndpoint";
 import type { CreateSnapshotPolicyRequest } from "@auto-os/opensearch-schemas";
 
 const getBazelHandlerPath = (): string => {
-    return path.join(
-      __dirname,
-      "./providers/opensearch/snapshot-policy/package.zip"
-    );
+  return path.join(
+    __dirname,
+    "../dist/providers/opensearch/snapshot-policy/package.zip"
+  );
 }
 
-type SnapshotPolicyProps =  CreateSnapshotPolicyRequest & {
+type SnapshotPolicyProps = CreateSnapshotPolicyRequest & {
   endpoint: IClusterEndpoint;
 }
 
@@ -46,8 +46,8 @@ export class SnapshotPolicy extends Construct {
       onEventHandler: f,
     });
 
-    const resourceProps: CreateSnapshotPolicyRequest  = Object.assign({}, props);
-    delete (resourceProps as {endpoint?: IClusterEndpoint})['endpoint'];
+    const resourceProps: CreateSnapshotPolicyRequest = Object.assign({}, props);
+    delete (resourceProps as { endpoint?: IClusterEndpoint })['endpoint'];
 
     const rsrc = new CustomResource(this, "CustomResource", {
       properties: {

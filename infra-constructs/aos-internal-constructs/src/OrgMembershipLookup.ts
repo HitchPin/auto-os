@@ -73,11 +73,14 @@ export class OrgMembershipLookup extends Construct {
   }
 
   static from(c: Construct, throwIfNotInOrg: boolean): OrgMembershipLookup {
-    const s = cdk.Stack.of(c);
+    let s = cdk.Stack.of(c);
+    if (s.nestedStackParent) {
+      s = s.nestedStackParent;
+    }
     const id = `org-membership-lookup-throw-${throwIfNotInOrg}`;
     const pConstruct =
       (s.node.tryFindChild(id) as OrgMembershipLookup) ||
-      new OrgMembershipLookup(c, id, { throwIfNotInOrg: throwIfNotInOrg});
+      new OrgMembershipLookup(s, id, { throwIfNotInOrg: throwIfNotInOrg});
     return pConstruct;
   }
 }

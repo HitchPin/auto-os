@@ -16,3 +16,5 @@ export type { LoadBalancerCertificateProps } from "./LoadBalancerCertificate";
 export { StringFuncs } from "./StringFuncs";
 export { ParamLink } from "./ParamLink";
 export { OrgMembershipLookup } from "./OrgMembershipLookup";
+export { RegisteredTenant } from "./RegisteredTenant";
+export { ProductIdentifier } from "./ProductIdentifier";

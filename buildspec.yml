@@ -1,0 +1,26 @@
+version: 0.2
+  
+phases:   
+  install:
+    runtime-versions:
+      java: corretto17
+      golang: 1.22
+      nodejs: 18
+      python: 3.12
+    commands:
+      - sudo apt update -y
+      - sudo apt install graphviz -y
+      # Nix
+      - curl -L https://nixos.org/nix/install -o install.sh && chmod +x ./install.sh && sudo ./install.sh
+      # Baselisk
+      - npm i -g @bazel/bazelisk
+  build:
+    commands:
+      - bazelisk build //admiral/infrastructure:synth
+
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: no
+  base-directory: dist/bin/admiral/infrastructure/cdk.out
+  enable-symlinks: no

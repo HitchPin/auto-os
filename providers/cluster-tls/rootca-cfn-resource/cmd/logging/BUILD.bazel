@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "logging",
+    srcs = [
+        "cloudwatchlogs.go",
+        "logging.go",
+    ],
+    importpath = "github.com/HitchPin/providers/cluster-tls/rootca-cfn-resource/cmd/logging",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_aws_aws_sdk_go//aws",
+        "@com_github_aws_aws_sdk_go//service/cloudwatchlogs",
+        "@com_github_aws_aws_sdk_go//service/cloudwatchlogs/cloudwatchlogsiface",
+        "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler",
+        "@com_github_segmentio_ksuid//:ksuid",
+    ],
+)

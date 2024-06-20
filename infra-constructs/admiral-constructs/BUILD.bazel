@@ -21,12 +21,13 @@ SOURCES = glob(
 filegroup(
     name = "assets",
     srcs = [
-        "src/internal/delegated_admin.py",
         "src/internal/trusted_svc_enabler.py",
-        "//providers/cluster-tls/rootca-cfn-resource:resourceProvider",
-        "//providers/cluster-tls/rootca-cfn-resource:resourceRoleStack",
+        "//handlers/account-mail-processor:zip",
         "//providers/cluster-tls/lbcert-cfn-resource:resourceProvider",
         "//providers/cluster-tls/lbcert-cfn-resource:resourceRoleStack",
+        "//providers/cluster-tls/rootca-cfn-resource:resourceProvider",
+        "//providers/cluster-tls/rootca-cfn-resource:resourceRoleStack",
+        "//providers/fiefdom:zip",
     ],
 )
 
@@ -46,12 +47,17 @@ ts_project(
     transpiler = "tsc",
     visibility = ["//visibility:public"],
     deps = [
+        ":node_modules/@auto-os/opensearch-schemas",
+        ":node_modules/@seeebiii/ses-verify-identities",
         ":node_modules/@types/node",
         ":node_modules/@types/yargs",
         ":node_modules/aws-cdk-lib",
         ":node_modules/constructs",
         ":node_modules/typescript",
-        "//infra-constructs/aos-internal-constructs:pkg",
         "//infra-constructs/aos-ami-constructs:pkg",
+        "//infra-constructs/aos-cluster-constructs:pkg",
+        "//infra-constructs/aos-domain-constructs:pkg",
+        "//infra-constructs/aos-internal-constructs:pkg",
+        "//infra-constructs/aos-opensearch-constructs:pkg",
     ],
 )

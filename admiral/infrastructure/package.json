@@ -11,13 +11,19 @@
   },
   "devDependencies": {
     "@auto-os/admiral-constructs": "workspace:*",
+    "@auto-os/aos-cluster-constructs": "workspace:*",
+    "@auto-os/aos-internal-constructs": "workspace:*",
+    "@seeebiii/ses-verify-identities": "^4.2.3",
     "@types/node": "20.11.19",
-    "aws-cdk": "2.137.0",
+    "aws-cdk": "2.146.0",
+    "cdk-remote-stack": "^2.0.101",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   },
   "dependencies": {
+    "@aws-cdk/app-staging-synthesizer-alpha": "2.146.0-alpha.0",
     "aws-cdk-lib": "2.137.0",
+    "cdk-ecr-deployment": "^3.0.67",
     "cdk-stacksets": "^0.0.150",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

@@ -21,15 +21,16 @@ SOURCES = glob(
 filegroup(
     name = "assets",
     srcs = [
-        "src/internal/handler.py",
+        "src/internal/product_id_finder.py",
         "src/internal/env_introspector.py",
+        "src/internal/handler.py",
         "src/internal/param_linker.py",
         "//maestro/client-cli",
         "//maestro/client-cli:bin-arm64",
         "//maestro/client-cli:bin-x86_64",
         "//plugins/eventing-plugin:zip",
-        "//providers/maestro-runner/container-image:tarball",
     ],
+    visibility = ["//visibility:public"],
 )
 
 ts_project(

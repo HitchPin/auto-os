@@ -19,5 +19,5 @@ use_repo(nix_repo, "nixpkgs")
 non_module_dev_deps = use_extension("//:non_modules_extensions.bzl", "non_module_dev_deps")
 use_repo(
     non_module_dev_deps,
-    "graphviz"
+    "graphviz",
 )

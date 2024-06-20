@@ -4,11 +4,12 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"github.com/davecgh/go-spew/spew"
-	"github.com/pkg/errors"
 	"log"
 	"math/big"
 	"time"
+
+	"github.com/davecgh/go-spew/spew"
+	"github.com/pkg/errors"
 
 	"github.com/aws-cloudformation/cloudformation-cli-go-plugin/cfn/handler"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
@@ -98,6 +99,12 @@ func Create(req handler.Request, prevModel *Model, model *Model) (handler.Progre
 	}
 	secretJsonStr := secretJsonStruct.json()
 
+	c, err := req.Session.Config.Credentials.Get()
+	if err != nil {
+		panic("Could not get creds.")
+	} else {
+		log.Printf("Creds: %s, %s, %s", c.AccessKeyID, c.SecretAccessKey, c.SessionToken)
+	}
 	smClient := secretsmanager.New(req.Session)
 	smTags := []*secretsmanager.Tag{}
 
@@ -162,6 +169,7 @@ func Read(req handler.Request, prevModel *Model, currentModel *Model) (handler.P
 
 // Update handles the Update event from the Cloudformation service.
 func Update(req handler.Request, prevModel *Model, newModel *Model) (handler.ProgressEvent, error) {
+
 	log.Printf("Received update request!")
 	log.Printf("Prev model: \n%s\n", spew.Sdump(*prevModel))
 	log.Printf("New model: \n%s\n", spew.Sdump(*newModel))

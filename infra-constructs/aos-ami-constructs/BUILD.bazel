@@ -29,6 +29,7 @@ filegroup(
         "//maestro/client-cli:bin-x86_64",
         "//plugins/eventing-plugin:zip",
     ],
+    visibility = ["//visibility:public"],
 )
 
 ts_project(

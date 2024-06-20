@@ -1,0 +1,24 @@
+{
+  "name": "@auto-os/image-deployer",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.138",
+    "@types/jest": "^29.5.12",
+    "@types/node": "20.11.19",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.3.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-codebuild": "^3.600.0"
+  }
+}

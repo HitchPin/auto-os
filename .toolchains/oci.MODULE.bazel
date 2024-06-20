@@ -1,10 +1,9 @@
 bazel_dep(name = "rules_oci", version = "2.0.0-alpha1")
-oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
     name = "buildpack",
     image = "mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled",
-    platforms = ["linux/arm64"]
+    platforms = ["linux/arm64"],
 )
-
 use_repo(oci, "buildpack")

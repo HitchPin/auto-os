@@ -1,8 +1,15 @@
-module(name="auto-os")
+module(name = "auto-os")
+
 include("//.toolchains:common.MODULE.bazel")
+
 include("//.toolchains:nixpkgs.MODULE.bazel")
+
 include("//.toolchains:golang.MODULE.bazel")
+
 include("//.toolchains:ts.MODULE.bazel")
+
 include("//.toolchains:python.MODULE.bazel")
+
 include("//.toolchains:oci.MODULE.bazel")
+
 include("//.toolchains:apko.MODULE.bazel")

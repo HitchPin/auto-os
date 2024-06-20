@@ -11,6 +11,7 @@ go_library(
     importpath = "github.com/HitchPin/providers/cluster-tls/rootca-cfn-resource/cmd/resource",
     visibility = ["//visibility:public"],
     deps = [
+        "//providers/cluster-tls/rootca-cfn-resource/cmd/logging",
         "@com_github_aws_aws_sdk_go//service/secretsmanager",
         "@com_github_aws_cloudformation_cloudformation_cli_go_plugin//cfn/handler",
         "@com_github_davecgh_go_spew//spew",

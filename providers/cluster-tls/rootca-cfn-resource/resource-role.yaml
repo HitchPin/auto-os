@@ -38,6 +38,13 @@ Resources:
                 - "secretsmanager:GetSecretValue"
                 - "secretsmanager:ListSecrets"
                 - "secretsmanager:TagResource"
+                - "logs:CreateLogGroup"
+                - "logs:CreateLogStream"
+                - "logs:DescribeLogGroups"
+                - "logs:DescribeLogStreams"
+                - "logs:PutLogEvents"
+                - "cloudwatch:ListMetrics"
+                - "cloudwatch:PutMetricData"
                 Resource: "*"
 Outputs:
   ExecutionRoleArn:

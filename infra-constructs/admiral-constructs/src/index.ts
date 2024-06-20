@@ -1,6 +1,11 @@
 export { AdmiralFleet } from "./AdmiralFleet";
 export { FleetTrustedServices } from "./FleetTrustedServices";
-export { DelegatedAdmins } from "./DelegatedAdmins";
+export { DelegatedServiceAdmin } from "./DelegatedServiceAdmin";
+export { Fiefdom } from './Fiefdom';
+export { OrgSharedKmsKey } from './OrgSharedKmsKey';
 export { OrgSharedBucket } from './OrgSharedBucket';
+export { OrgSharedDockerRepo } from './OrgSharedDockerRepo';
 export { ResourceProviderUploader } from "./ResourceProviderUploader";
 export { ResourceProviderRegistration } from './ResourceProviderRegistration';
+export { FleetMailbox } from './FleetMailbox';
+export { AdmiralApi } from './AdmiralApi';

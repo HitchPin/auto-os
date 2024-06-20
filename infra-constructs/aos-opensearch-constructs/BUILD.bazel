@@ -25,6 +25,7 @@ filegroup(
         "//providers/opensearch/s3-snapshot-repo:zip",
         "//providers/opensearch/snapshot-policy:zip",
     ],
+    visibility = ["//visibility:public"],
 )
 
 ts_project(

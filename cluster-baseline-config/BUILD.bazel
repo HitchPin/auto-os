@@ -1,0 +1,29 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@aspect_rules_py//py:defs.bzl", "py_binary")
+load("@rules_pkg//:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//:pkg.bzl", "pkg_zip")
+
+filegroup(
+    name = "config_files",
+    srcs = glob([
+        "configs/**/*",
+    ]),
+)
+
+pkg_files(
+    name = "bundle_files",
+    srcs = [
+        ":config_files",
+    ],
+    strip_prefix = strip_prefix.files_only(),
+    visibility = ["//visibility:public"],
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":bundle_files",
+    ],
+    package_file_name = "package.zip",
+    visibility = ["//visibility:public"],
+)
